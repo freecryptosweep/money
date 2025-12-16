@@ -3,147 +3,200 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ERROR</title>
+  <title>Security Alert - Access Denied</title>
   <style>
+    :root {
+      --primary-red: #ff0000;
+      --dark-bg: #0a0a0a;
+      --glow-red: rgba(255, 0, 0, 0.6);
+      --text-green: #00ff00;
+      --text-white: #ffffff;
+      --accent-gray: #333333;
+    }
+    
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Courier New', Courier, monospace;
-      background-color: #000;
-      color: #f00;
+      font-family: 'Roboto Mono', monospace;
+      background-color: var(--dark-bg);
+      color: var(--primary-red);
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       overflow: hidden;
+      position: relative;
     }
+    
+    /* Matrix Rain Background */
+    #matrix-rain {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--dark-bg);
+      overflow: hidden;
+      z-index: -1;
+      opacity: 0.3;
+    }
+    
+    .matrix-column {
+      position: absolute;
+      top: -100%;
+      white-space: nowrap;
+      font-size: 1.2em;
+      color: var(--text-green);
+      animation: rain 10s linear infinite;
+    }
+    
+    @keyframes rain {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(200vh); }
+    }
+    
     .container {
       text-align: center;
-      padding: 40px;
-      border: 4px solid #f00;
-      border-radius: 15px;
-      box-shadow: 0 0 30px #f00, inset 0 0 20px #400;
-      max-width: 900px;
-      background: rgba(20, 0, 0, 0.95);
-      animation: pulse 1.5s infinite alternate;
+      padding: 50px;
+      border: 4px solid var(--primary-red);
+      border-radius: 20px;
+      box-shadow: 0 0 40px var(--glow-red), inset 0 0 30px rgba(64, 0, 0, 0.8);
+      max-width: 1000px;
+      background: linear-gradient(145deg, var(--accent-gray), var(--dark-bg));
+      animation: pulse-glow 2s infinite alternate;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
     }
-    @keyframes pulse {
-      0% { box-shadow: 0 0 30px #f00, inset 0 0 20px #400; }
-      100% { box-shadow: 0 0 50px #f00, inset 0 0 30px #800; }
+    
+    @keyframes pulse-glow {
+      0% { box-shadow: 0 0 40px var(--glow-red), inset 0 0 30px rgba(64, 0, 0, 0.8); }
+      100% { box-shadow: 0 0 60px var(--primary-red), inset 0 0 40px rgba(128, 0, 0, 0.6); }
     }
+    
     h1 {
-      font-size: 3.2em;
-      margin: 0 0 10px;
+      font-size: 3.5em;
+      margin: 0 0 15px;
       text-transform: uppercase;
-      letter-spacing: 4px;
-      text-shadow: 0 0 15px #f00;
+      letter-spacing: 6px;
+      text-shadow: 0 0 20px var(--primary-red);
+      color: var(--text-white);
     }
+    
     h2 {
-      font-size: 2.8em;
-      margin: 0 0 30px;
-      letter-spacing: 3px;
-      text-shadow: 0 0 20px #f00;
-      animation: glitch 1.8s infinite;
+      font-size: 3em;
+      margin: 0 0 40px;
+      letter-spacing: 4px;
+      text-shadow: 0 0 25px var(--primary-red);
+      animation: glitch-pro 2s infinite;
+      color: var(--primary-red);
     }
+    
     .warning {
-      font-size: 2.5em;
-      margin: 30px 0;
-      color: #ff4444;
-      text-shadow: 0 0 20px #f00;
-    }
-    .message {
-      font-size: 1.8em;
-      line-height: 1.6;
+      font-size: 2.8em;
       margin: 40px 0;
-    }
-    .countdown {
-      font-size: 2.2em;
-      color: #fff;
-      background: #300;
+      color: var(--text-white);
+      text-shadow: 0 0 25px var(--primary-red);
+      background: rgba(255, 0, 0, 0.2);
       padding: 15px;
-      border: 2px dashed #f00;
-      margin: 40px auto;
-      width: fit-content;
-      animation: blink 1s infinite;
+      border-radius: 10px;
+      animation: fade-in 1.5s ease-in;
     }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
+    
+    @keyframes fade-in {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
-    .emoji {
-      font-size: 5em;
-      margin: 30px 0;
+    
+    .message {
+      font-size: 1.9em;
+      line-height: 1.7;
+      margin: 50px 0;
+      color: var(--text-white);
+      animation: scan-line 3s infinite;
+      position: relative;
     }
-    .reveal {
-      display: none;
-      margin-top: 60px;
-      font-size: 1.4em;
-      color: #0f0;
-      background: #000;
+    
+    @keyframes scan-line {
+      0% { background-position: 0 -100%; }
+      100% { background-position: 0 200%; }
+    }
+    
+    .message::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(transparent, rgba(0, 255, 0, 0.1), transparent);
+      animation: scan 2s linear infinite;
+    }
+    
+    @keyframes scan {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+    
+    .progress-container {
+      margin: 40px 0;
+      background: var(--accent-gray);
+      border: 2px solid var(--primary-red);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .progress-bar {
+      width: 0;
+      height: 30px;
+      background: linear-gradient(90deg, var(--primary-red), #ff4444);
+      animation: progress 8s linear forwards;
+      box-shadow: 0 0 20px var(--glow-red);
+    }
+    
+    @keyframes progress {
+      0% { width: 0; }
+      100% { width: 100%; }
+    }
+    
+    .log-window {
+      background: var(--dark-bg);
+      border: 2px solid var(--text-green);
+      border-radius: 10px;
       padding: 20px;
-      border: 2px solid #0f0;
+      margin: 40px 0;
+      max-height: 200px;
+      overflow-y: auto;
+      text-align: left;
+      font-size: 1.2em;
+      color: var(--text-green);
+      animation: terminal-scroll 10s linear infinite;
     }
-    @keyframes glitch {
-      0% { text-shadow: 0.05em 0 0 #f00, -0.05em 0 0 #0ff; clip: rect(0, 9999px, 0, 0); }
-      20% { text-shadow: -0.05em 0 0 #0f0, 0.05em 0 0 #ff0; clip: rect(20px, 9999px, 40px, 0); }
-      40% { text-shadow: 0.05em -0.05em 0 #f00, -0.05em 0.05em 0 #00f; clip: rect(60px, 9999px, 80px, 0); }
-      60% { text-shadow: -0.05em 0 0 #0ff, 0.05em 0 0 #f00; clip: rect(100px, 9999px, 120px, 0); }
-      80% { text-shadow: 0.05em 0.05em 0 #ff0, -0.05em -0.05em 0 #0f0; clip: rect(140px, 9999px, 160px, 0); }
-      100% { text-shadow: -0.05em 0 0 #f00, 0.05em 0 0 #0ff; clip: rect(0, 9999px, 0, 0); }
+    
+    .log-line {
+      opacity: 0;
+      animation: type-in 0.5s forwards;
     }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>Welcome to Michael's</h1>
-    <h2>Data-Stealing Website and Dating-Platform</h2>
     
-    <div class="warning">CRITICAL SECURITY BREACH</div>
+    @keyframes type-in {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
     
-    <div class="message">
-      All files have been encrypted and exfiltrated.<br/>
-      Thank you for your personal data! <br/>
-      Photos, documents, messages, passwords — upload complete.<br/><br/>
-      Your camera was briefly accessed for verification.<br/>
-      We know where you are.
-    </div>
+    .countdown {
+      font-size: 2.5em;
+      color: var(--text-white);
+      background: rgba(48, 0, 0, 0.8);
+      padding: 20px;
+      border: 3px dashed var(--primary-red);
+      margin: 50px auto;
+      width: fit-content;
+      border-radius: 15px;
+      animation: blink-pro 1.2s infinite;
+      box-shadow: 0 0 30px var(--glow-red);
+    }
     
-    <div class="emoji">💀🔴🕱</div>
-    
-    <div class="countdown" id="timer">
-      Data deletion in: <span id="countdown">00:10</span>
-    </div>
-    
-    <div class="reveal" id="reveal">
-      <strong>im just kidding</strong> 😈<br/><br/>
-     <br/>
-      Nothing was accessed, stolen, or encrypted.<br/>
-      Your files are safe. Your camera was never touched.<br/><br/>
-     <br/>
-      <br/><br/>
-      <small></small><br/><br/>
-      The talmudic network sends it's regards.
-    </div>
-  </div>
-
-  <script>
-    // Fake countdown timer (10 seconds)
-    let seconds = 10;
-    const countdownElement = document.getElementById('countdown');
-    const revealElement = document.getElementById('reveal');
-
-    const timer = setInterval(() => {
-      seconds--;
-      const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
-      const secs = String(seconds % 60).padStart(2, '0');
-      countdownElement.textContent = `${mins}:${secs}`;
-
-      if (seconds <= 0) {
-        clearInterval(timer);
-        countdownElement.parentElement.style.display = 'none';
-        revealElement.style.display = 'block';
-      }
-    }, 1000);
-  </script>
-</body>
-</html>
+    @keyframes blink-pro {
+      0%, 100% { opacity: 1; border-color: var(--primary-red); }
+      50% { opacity: 0.6
