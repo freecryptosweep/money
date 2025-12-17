@@ -10,109 +10,85 @@
       --secondary-yellow: #ffff00;
       --secondary-blue: #00ffff;
       --background-dark: #000000;
-      --text-shadow-glow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
+      --text-shadow-glow: 0 0 8px #ff0000, 0 0 16px #ff0000, 0 0 24px #ff0000;
       --glitch-shadow-red: 2px 2px 0 #ff0000;
       --glitch-shadow-blue: -2px -2px 0 #00ffff;
-      --glitch-shadow-yellow: 0 0 0 #ffff00;
     }
 
     body {
       margin: 0;
-      padding: 40px 20px;
+      padding: 20px 15px;
       background: var(--background-dark);
       color: var(--primary-red);
       font-family: 'Courier New', Courier, monospace;
-      line-height: 1.8;
+      line-height: 1.7;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+      align-items: flex-start;
       overflow-x: hidden;
       position: relative;
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 100%;
+      width: 100%;
       text-align: center;
-      position: relative;
-      z-index: 1;
-      padding: 60px;
-      border: 4px solid var(--primary-red);
-      border-radius: 20px;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.95), rgba(20,0,0,0.95));
-      box-shadow: 0 0 50px rgba(255,0,0,0.5), inset 0 0 30px rgba(255,0,0,0.3);
+      padding: 30px 20px;
+      border: 3px solid var(--primary-red);
+      border-radius: 15px;
+      background: linear-gradient(to bottom, rgba(10,0,0,0.95), rgba(20,0,0,0.98));
+      box-shadow: 0 0 30px rgba(255,0,0,0.4), inset 0 0 20px rgba(255,0,0,0.2);
     }
 
     h1 {
-      font-size: 3.5rem;
-      margin: 0 0 20px;
-      letter-spacing: 0.2em;
+      font-size: 2.2rem;
+      margin: 0 0 15px;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      text-shadow: var(--text-shadow-glow), var(--glitch-shadow-red), var(--glitch-shadow-blue);
-      animation: glitch-multi 3s infinite linear alternate-reverse;
+      text-shadow: var(--text-shadow-glow);
+      animation: glitch-multi 3s infinite alternate;
       color: var(--secondary-yellow);
     }
 
     h2 {
-      font-size: 3rem;
-      margin: 0 0 60px;
-      letter-spacing: 0.15em;
-      text-shadow: var(--text-shadow-glow), var(--glitch-shadow-red), var(--glitch-shadow-blue);
-      animation: glitch-multi 2.5s infinite linear alternate-reverse;
+      font-size: 1.9rem;
+      margin: 0 0 40px;
+      letter-spacing: 0.12em;
+      text-shadow: var(--text-shadow-glow);
+      animation: glitch-multi 2.8s infinite alternate;
       color: var(--secondary-yellow);
     }
 
     .warning {
-      font-size: 3.2rem;
-      margin: 60px 0;
-      letter-spacing: 0.1em;
+      font-size: 2.1rem;
+      margin: 40px 0;
+      letter-spacing: 0.08em;
       text-shadow: var(--text-shadow-glow);
       animation: pulse-glow 2s infinite alternate;
     }
 
     .message p {
-      font-size: 2rem;
-      margin: 40px 0;
-      text-shadow: 0 0 15px var(--primary-red);
-      max-width: 90%;
-      margin-left: auto;
-      margin-right: auto;
-      transition: text-shadow 0.3s ease;
-    }
-
-    .message p:hover {
-      text-shadow: 0 0 25px var(--primary-red), 0 0 35px var(--primary-red);
+      font-size: 1.35rem;
+      margin: 30px 0;
+      text-shadow: 0 0 12px var(--primary-red);
+      padding: 0 10px;
     }
 
     .final-line {
-      font-size: 2.2rem;
-      margin-top: 80px;
+      font-size: 1.5rem;
+      margin-top: 60px;
       text-shadow: var(--text-shadow-glow);
       border-top: 2px dashed var(--primary-red);
-      padding-top: 40px;
+      padding-top: 30px;
     }
 
-    /* Background effects for complexity */
-    body::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,0,0,0.05) 10px, rgba(255,0,0,0.05) 20px);
-      opacity: 0.3;
-      z-index: -1;
-    }
-
-    /* Matrix rain for added complexity */
+    /* Matrix rain - optimized for mobile performance */
     #matrix-rain {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0.1;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      opacity: 0.08;
       z-index: -1;
       pointer-events: none;
     }
@@ -120,51 +96,59 @@
     .rain-column {
       position: absolute;
       top: -100%;
-      font-size: 1.2rem;
-      color: #00ff00;
-      animation: rain-fall 10s linear infinite;
+      font-size: 0.9rem;
+      color: #00ff44;
+      animation: rain-fall linear infinite;
       white-space: nowrap;
     }
 
     @keyframes rain-fall {
-      to { transform: translateY(200vh); }
+      to { transform: translateY(220vh); }
     }
 
-    /* Animations */
     @keyframes glitch-multi {
-      0% { text-shadow: var(--glitch-shadow-red), var(--glitch-shadow-blue), var(--glitch-shadow-yellow); }
-      20% { text-shadow: -2px 2px 0 #ff00ff, 2px -2px 0 #00ff00, var(--glitch-shadow-yellow); }
-      40% { text-shadow: 2px -2px 0 #00ffff, -2px 2px 0 #ff00ff, var(--glitch-shadow-yellow); }
-      60% { text-shadow: var(--glitch-shadow-blue), var(--glitch-shadow-red), var(--glitch-shadow-yellow); }
-      80% { text-shadow: -2px -2px 0 #ffff00, 2px 2px 0 #ff0000, var(--glitch-shadow-blue); }
-      100% { text-shadow: var(--glitch-shadow-red), var(--glitch-shadow-blue), var(--glitch-shadow-yellow); }
+      0%, 100% { text-shadow: var(--glitch-shadow-red), var(--glitch-shadow-blue); }
+      20% { text-shadow: -2px 2px 0 #ff00ff, 2px -2px 0 #00ff00; }
+      40% { text-shadow: 2px -2px 0 #00ffff, -2px 2px 0 #ff00ff; }
+      60% { text-shadow: var(--glitch-shadow-blue), var(--glitch-shadow-red); }
+      80% { text-shadow: -1px -1px 0 #ffff00, 1px 1px 0 #ff0000; }
     }
 
     @keyframes pulse-glow {
       from { text-shadow: var(--text-shadow-glow); }
-      to { text-shadow: 0 0 15px #ff0000, 0 0 30px #ff0000, 0 0 45px #ff0000; }
+      to { text-shadow: 0 0 12px #ff0000, 0 0 24px #ff0000, 0 0 36px #ff0000; }
     }
 
-    /* Accessibility improvements */
+    /* Further mobile optimizations */
+    @media (max-width: 480px) {
+      body { padding: 15px 10px; }
+      .container { padding: 25px 15px; border-width: 2px; }
+      h1 { font-size: 1.9rem; letter-spacing: 0.1em; }
+      h2 { font-size: 1.6rem; margin-bottom: 30px; }
+      .warning { font-size: 1.8rem; margin: 30px 0; }
+      .message p { font-size: 1.25rem; margin: 25px 0; }
+      .final-line { font-size: 1.4rem; margin-top: 50px; padding-top: 25px; }
+    }
+
+    @media (max-width: 360px) {
+      h1 { font-size: 1.7rem; }
+      h2 { font-size: 1.4rem; }
+      .warning { font-size: 1.6rem; }
+      .message p { font-size: 1.15rem; }
+    }
+
+    /* Respect reduced motion preference */
     @media (prefers-reduced-motion: reduce) {
-      * { animation: none !important; transition: none !important; }
-    }
-
-    @media (max-width: 768px) {
-      h1 { font-size: 2.5rem; }
-      h2 { font-size: 2rem; }
-      .warning { font-size: 2.2rem; }
-      .message p { font-size: 1.5rem; }
-      .final-line { font-size: 1.6rem; }
-      .container { padding: 30px; }
+      * { animation: none !important; }
+      .rain-column { display: none; }
     }
   </style>
 </head>
 <body>
   <div id="matrix-rain"></div>
   
-  <div class="container" role="main" aria-labelledby="title">
-    <h1 id="title">WELCOME TO MICHAEL'S</h1>
+  <div class="container" role="main">
+    <h1>WELCOME TO MICHAEL'S</h1>
     <h2>Data-Stealing Website and Dating-Platform</h2>
     
     <div class="warning" role="alert">CRITICAL SECURITY BREACH</div>
@@ -179,19 +163,21 @@
   </div>
 
   <script>
-    // Complex Matrix rain effect
+    // Mobile-optimized Matrix rain (fewer columns on small screens)
     const rain = document.getElementById('matrix-rain');
-    const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
-    const columns = Math.floor(window.innerWidth / 20);
+    const chars = 'you'll learn to love me';
+    const width = window.innerWidth;
+    const columnWidth = width < 480 ? 30 : 20;
+    const columns = Math.floor(width / columnWidth);
     
     for (let i = 0; i < columns; i++) {
       const column = document.createElement('div');
       column.className = 'rain-column';
-      column.style.left = `${i * 20}px`;
-      column.style.animationDelay = `${Math.random() * 5}s`;
-      column.style.animationDuration = `${8 + Math.random() * 10}s`;
+      column.style.left = `${i * columnWidth}px`;
+      column.style.animationDelay = `${Math.random() * 6}s`;
+      column.style.animationDuration = `${10 + Math.random() * 12}s`;
       let text = '';
-      for (let j = 0; j < 50; j++) {
+      for (let j = 0; j < 40; j++) {
         text += chars[Math.floor(Math.random() * chars.length)] + ' ';
       }
       column.textContent = text;
