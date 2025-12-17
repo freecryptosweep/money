@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CRITICAL SECURITY BREACH</title>
@@ -16,6 +16,10 @@
       --glitch-shadow-red: 2px 2px 0 #ff0000;
       --glitch-shadow-blue: -2px -2px 0 #00ffff;
       --matrix-green: #00ff44;
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
@@ -34,7 +38,7 @@
     }
 
     .container {
-      max-width: 100%;
+      max-width: 800px;
       width: 100%;
       text-align: center;
       padding: 30px 20px;
@@ -82,6 +86,78 @@
       z-index: 10;
     }
 
+    /* Progress bar styling */
+    .progress-container {
+      margin: 40px auto;
+      max-width: 500px;
+    }
+
+    .progress-label {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      text-align: left;
+      color: var(--matrix-green);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 30px;
+      background: rgba(0,0,0,0.5);
+      border: 2px solid var(--matrix-green);
+      border-radius: 5px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, 
+        var(--matrix-green) 0%, 
+        #00cc33 50%, 
+        var(--matrix-green) 100%);
+      width: 0%;
+      transition: width 0.3s ease;
+      box-shadow: 0 0 10px var(--matrix-green);
+    }
+
+    .progress-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 5px #000;
+      z-index: 1;
+    }
+
+    /* File list styling */
+    .file-list {
+      margin: 30px auto;
+      max-width: 500px;
+      text-align: left;
+      font-size: 0.9rem;
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid var(--primary-red);
+      padding: 15px;
+      background: rgba(0,0,0,0.3);
+      color: var(--matrix-green);
+    }
+
+    .file-item {
+      padding: 5px 0;
+      opacity: 0;
+      animation: fadeIn 0.3s forwards;
+    }
+
+    .file-item::before {
+      content: "✓ ";
+      color: var(--matrix-green);
+      margin-right: 5px;
+    }
+
     .final-line {
       font-size: 1.5rem;
       margin-top: 60px;
@@ -90,9 +166,44 @@
       padding-top: 30px;
       position: relative;
       z-index: 10;
+      opacity: 0;
     }
 
-    /* Very subtle foreground rain */
+    .final-line.visible {
+      animation: fadeIn 1s forwards;
+    }
+
+    /* Webcam indicator */
+    .webcam-indicator {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(255,0,0,0.9);
+      color: white;
+      padding: 10px 15px;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      z-index: 100;
+      box-shadow: 0 0 20px rgba(255,0,0,0.8);
+    }
+
+    .webcam-indicator.active {
+      display: flex;
+      animation: pulse-glow 1.5s infinite;
+    }
+
+    .webcam-dot {
+      width: 12px;
+      height: 12px;
+      background: #fff;
+      border-radius: 50%;
+      animation: blink 1s infinite;
+    }
+
+    /* Matrix rain */
     #matrix-rain {
       position: fixed;
       top: 0; left: 0;
@@ -126,6 +237,16 @@
       to { text-shadow: 0 0 12px #ff0000, 0 0 24px #ff0000, 0 0 36px #ff0000; }
     }
 
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0.3; }
+    }
+
     @media (max-width: 480px) {
       body { padding: 15px 10px; }
       .container { padding: 25px 15px; border-width: 2px; }
@@ -136,6 +257,9 @@
       .final-line { font-size: 1.4rem; margin-top: 50px; padding-top: 25px; }
       #matrix-rain { opacity: 0.2; }
       .rain-column { font-size: 0.8rem; }
+      .progress-container { font-size: 0.9rem; }
+      .file-list { font-size: 0.8rem; max-height: 150px; }
+      .webcam-indicator { top: 10px; right: 10px; font-size: 0.8rem; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -147,6 +271,11 @@
 <body>
   <div id="matrix-rain"></div>
   
+  <div class="webcam-indicator" id="webcamIndicator">
+    <div class="webcam-dot"></div>
+    <span>CAMERA ACTIVE</span>
+  </div>
+  
   <div class="container" role="main">
     <h1>WELCOME TO MICHAEL'S</h1>
     <h2>Data-Stealing Website and Dating-Platform</h2>
@@ -155,50 +284,135 @@
     
     <div class="message">
       <p>All files have been encrypted and exfiltrated.</p>
+      
+      <div class="progress-container">
+        <div class="progress-label">UPLOAD PROGRESS:</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+          <div class="progress-text" id="progressText">0%</div>
+        </div>
+      </div>
+
+      <div class="file-list" id="fileList"></div>
+      
       <p>Thank you for your personal data!</p>
       <p>Photos, documents, messages, passwords — upload complete.</p>
-      <p>Your camera was briefly accessed for verification.</p>
-      <p class="final-line">The talmudic network sends it's regards</p>
+      <p class="final-line" id="finalLine">The talmudic network sends its regards</p>
     </div>
   </div>
 
   <script>
-    // Very sporadic "YOU'LL LEARN TO LOVE ME" — roughly one new drop every 8–12 seconds
+    // Fake files to display
+    const fakeFiles = [
+      "passwords.txt",
+      "banking_info.xlsx",
+      "family_photos_2024.zip",
+      "private_messages.db",
+      "browser_history.dat",
+      "crypto_wallet_keys.txt",
+      "tax_returns_2023.pdf",
+      "medical_records.doc",
+      "social_security.pdf",
+      "email_archive.mbox"
+    ];
+
+    // Progress bar animation
+    let progress = 0;
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    const fileList = document.getElementById('fileList');
+    const webcamIndicator = document.getElementById('webcamIndicator');
+    const finalLine = document.getElementById('finalLine');
+
+    function updateProgress() {
+      if (progress < 100) {
+        // Random increment between 3-8%
+        progress += Math.floor(Math.random() * 6) + 3;
+        if (progress > 100) progress = 100;
+        
+        progressFill.style.width = progress + '%';
+        progressText.textContent = progress + '%';
+        
+        // Add a random file
+        if (fakeFiles.length > 0 && Math.random() > 0.3) {
+          const file = fakeFiles.shift();
+          const fileItem = document.createElement('div');
+          fileItem.className = 'file-item';
+          fileItem.textContent = file;
+          fileList.appendChild(fileItem);
+          fileList.scrollTop = fileList.scrollHeight;
+        }
+        
+        // Continue updating
+        setTimeout(updateProgress, 400 + Math.random() * 600);
+      } else {
+        // Show final message
+        setTimeout(() => {
+          finalLine.classList.add('visible');
+        }, 1000);
+      }
+    }
+
+    // Start progress after short delay
+    setTimeout(() => {
+      updateProgress();
+    }, 1500);
+
+    // Show webcam indicator briefly
+    setTimeout(() => {
+      webcamIndicator.classList.add('active');
+      setTimeout(() => {
+        webcamIndicator.classList.remove('active');
+      }, 3000);
+    }, 2000);
+
+    // Matrix rain effect
     const rain = document.getElementById('matrix-rain');
     const phrase = "YOU'LL LEARN TO LOVE ME";
 
     function createDrop() {
       const column = document.createElement('div');
       column.className = 'rain-column';
-      
-      // Random position across the screen
       column.style.left = `${Math.random() * 90 + 5}vw`;
-      
-      // Random slight horizontal drift for more natural feel
       column.style.animation = `rain-fall ${15 + Math.random() * 10}s linear forwards`;
-      
-      // Single line only — short and subtle
       column.textContent = phrase;
-      
       rain.appendChild(column);
       
-      // Remove after animation ends to keep DOM clean
       setTimeout(() => {
         if (column.parentNode) {
           column.parentNode.removeChild(column);
         }
-      }, 30000); // Longer than animation duration
+      }, 30000);
     }
 
-    // Start with one drop immediately
     createDrop();
-
-    // Then add a new drop every 8–12 seconds on average
     setInterval(() => {
-      if (Math.random() > 0.3) { // 70% chance to skip some intervals for extra sparsity
+      if (Math.random() > 0.3) {
         createDrop();
       }
-    }, 10000); // Base interval ~10s, adjusted with randomness
+    }, 10000);
+
+    // Add CSS animation for rain falling
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes rain-fall {
+        from {
+          transform: translateY(-100%);
+          opacity: 0;
+        }
+        5% {
+          opacity: 1;
+        }
+        95% {
+          opacity: 1;
+        }
+        to {
+          transform: translateY(100vh);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
   </script>
 </body>
 </html>
