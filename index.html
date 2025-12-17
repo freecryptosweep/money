@@ -1,216 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CRITICAL SECURITY BREACH</title>
   <style>
     :root {
-      --red: #ff0000;
-      --yellow: #ffff00;
-      --dark: #000000;
-      --glow-red: 0 0 20px #ff0000, 0 0 40px #ff0000, 0 0 60px #ff0000;
-      --glow-yellow: 0 0 20px #ffff00, 0 0 40px #ffff00;
-      --green: #00ff44;
+      --primary-red: #ff0000;
+      --secondary-yellow: #ffff00;
+      --secondary-blue: #00ffff;
+      --background-dark: #000000;
+      --text-shadow-glow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
+      --glitch-shadow-red: 2px 2px 0 #ff0000;
+      --glitch-shadow-blue: -2px -2px 0 #00ffff;
+      --glitch-shadow-yellow: 0 0 0 #ffff00;
     }
-    
+
     body {
       margin: 0;
       padding: 40px 20px;
-      background: var(--dark);
-      color: var(--red);
+      background: var(--background-dark);
+      color: var(--primary-red);
       font-family: 'Courier New', Courier, monospace;
+      line-height: 1.8;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      overflow: hidden;
+      overflow-x: hidden;
       position: relative;
-      line-height: 1.6;
     }
-    
-    /* Matrix rain background */
-    #matrix {
-      position: fixed;
-      inset: 0;
-      opacity: 0.15;
-      z-index: -1;
-    }
-    
-    .drop {
-      position: absolute;
-      color: var(--green);
-      font-size: 1em;
-      white-space: nowrap;
-      animation: fall linear infinite;
-    }
-    
-    @keyframes fall {
-      to { transform: translateY(110vh); }
-    }
-    
+
     .container {
+      max-width: 1200px;
       text-align: center;
-      max-width: 1100px;
+      position: relative;
       z-index: 1;
+      padding: 60px;
+      border: 4px solid var(--primary-red);
+      border-radius: 20px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.95), rgba(20,0,0,0.95));
+      box-shadow: 0 0 50px rgba(255,0,0,0.5), inset 0 0 30px rgba(255,0,0,0.3);
     }
-    
+
     h1 {
-      font-size: 4.5em;
+      font-size: 3.5rem;
       margin: 0 0 20px;
-      letter-spacing: 12px;
-      color: var(--yellow);
-      text-shadow: var(--glow-yellow), 0 0 80px #ffff00;
-      animation: glitch-title 4s infinite;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-shadow: var(--text-shadow-glow), var(--glitch-shadow-red), var(--glitch-shadow-blue);
+      animation: glitch-multi 3s infinite linear alternate-reverse;
+      color: var(--secondary-yellow);
     }
-    
+
     h2 {
-      font-size: 4em;
-      margin: 0 0 80px;
-      letter-spacing: 10px;
-      color: var(--yellow);
-      text-shadow: var(--glow-yellow);
-      animation: glitch-subtitle 3.5s infinite;
+      font-size: 3rem;
+      margin: 0 0 60px;
+      letter-spacing: 0.15em;
+      text-shadow: var(--text-shadow-glow), var(--glitch-shadow-red), var(--glitch-shadow-blue);
+      animation: glitch-multi 2.5s infinite linear alternate-reverse;
+      color: var(--secondary-yellow);
     }
-    
+
     .warning {
-      font-size: 4.2em;
-      margin: 80px 0;
-      letter-spacing: 8px;
-      text-shadow: var(--glow-red);
-      animation: pulse 2s infinite alternate;
+      font-size: 3.2rem;
+      margin: 60px 0;
+      letter-spacing: 0.1em;
+      text-shadow: var(--text-shadow-glow);
+      animation: pulse-glow 2s infinite alternate;
     }
-    
-    @keyframes pulse {
-      from { text-shadow: var(--glow-red), 0 0 80px #ff0000; }
-      to { text-shadow: var(--glow-red), 0 0 100px #ff0000; }
-    }
-    
+
     .message p {
-      font-size: 2.6em;
-      margin: 50px 0;
-      text-shadow: 0 0 15px var(--red);
+      font-size: 2rem;
+      margin: 40px 0;
+      text-shadow: 0 0 15px var(--primary-red);
       max-width: 90%;
       margin-left: auto;
       margin-right: auto;
+      transition: text-shadow 0.3s ease;
     }
-    
+
+    .message p:hover {
+      text-shadow: 0 0 25px var(--primary-red), 0 0 35px var(--primary-red);
+    }
+
     .final-line {
-      font-size: 2.8em;
-      margin: 100px 0 0;
-      opacity: 0;
-      text-shadow: var(--glow-red);
-      animation: reveal-final 1.5s forwards 15s;
+      font-size: 2.2rem;
+      margin-top: 80px;
+      text-shadow: var(--text-shadow-glow);
+      border-top: 2px dashed var(--primary-red);
+      padding-top: 40px;
     }
-    
-    @keyframes reveal-final {
-      to { opacity: 1; }
-    }
-    
-    .progress-container {
-      margin: 80px auto;
-      width: 80%;
-      max-width: 800px;
-      height: 40px;
-      background: #111;
-      border: 3px solid var(--red);
-      overflow: hidden;
-      box-shadow: 0 0 40px rgba(255,0,0,0.6);
-    }
-    
-    .progress {
+
+    /* Background effects for complexity */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
       height: 100%;
-      width: 0;
-      background: linear-gradient(90deg, #800000, var(--red));
-      animation: fill 15s linear forwards;
-      box-shadow: 0 0 50px var(--red);
+      background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,0,0,0.05) 10px, rgba(255,0,0,0.05) 20px);
+      opacity: 0.3;
+      z-index: -1;
     }
-    
-    @keyframes fill {
-      to { width: 100%; }
+
+    /* Matrix rain for added complexity */
+    #matrix-rain {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.1;
+      z-index: -1;
+      pointer-events: none;
     }
-    
-    .countdown {
-      font-size: 3.2em;
-      margin: 80px 0;
-      padding: 25px;
-      border: 5px dashed var(--red);
-      display: inline-block;
-      animation: blink 1.3s infinite;
+
+    .rain-column {
+      position: absolute;
+      top: -100%;
+      font-size: 1.2rem;
+      color: #00ff00;
+      animation: rain-fall 10s linear infinite;
+      white-space: nowrap;
     }
-    
-    @keyframes blink {
-      50% { opacity: 0.6; border-color: #800000; }
+
+    @keyframes rain-fall {
+      to { transform: translateY(200vh); }
     }
-    
-    @keyframes glitch-title {
-      0%, 100% { text-shadow: var(--glow-yellow), 0 0 80px #ffff00; }
-      10% { text-shadow: 5px 5px 0 #ff00ff, -5px -5px 0 cyan, var(--glow-yellow); }
-      20% { text-shadow: -5px 5px 0 #00ffff, 5px -5px 0 magenta, var(--glow-yellow); }
+
+    /* Animations */
+    @keyframes glitch-multi {
+      0% { text-shadow: var(--glitch-shadow-red), var(--glitch-shadow-blue), var(--glitch-shadow-yellow); }
+      20% { text-shadow: -2px 2px 0 #ff00ff, 2px -2px 0 #00ff00, var(--glitch-shadow-yellow); }
+      40% { text-shadow: 2px -2px 0 #00ffff, -2px 2px 0 #ff00ff, var(--glitch-shadow-yellow); }
+      60% { text-shadow: var(--glitch-shadow-blue), var(--glitch-shadow-red), var(--glitch-shadow-yellow); }
+      80% { text-shadow: -2px -2px 0 #ffff00, 2px 2px 0 #ff0000, var(--glitch-shadow-blue); }
+      100% { text-shadow: var(--glitch-shadow-red), var(--glitch-shadow-blue), var(--glitch-shadow-yellow); }
     }
-    
-    @keyframes glitch-subtitle {
-      0%, 100% { text-shadow: var(--glow-yellow); }
-      15% { text-shadow: 4px 4px 0 #ff00ff, -4px -4px 0 cyan; }
-      30% { text-shadow: -4px 4px 0 #00ffff, 4px -4px 0 magenta; }
+
+    @keyframes pulse-glow {
+      from { text-shadow: var(--text-shadow-glow); }
+      to { text-shadow: 0 0 15px #ff0000, 0 0 30px #ff0000, 0 0 45px #ff0000; }
+    }
+
+    /* Accessibility improvements */
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 2.5rem; }
+      h2 { font-size: 2rem; }
+      .warning { font-size: 2.2rem; }
+      .message p { font-size: 1.5rem; }
+      .final-line { font-size: 1.6rem; }
+      .container { padding: 30px; }
     }
   </style>
 </head>
 <body>
-  <div id="matrix"></div>
+  <div id="matrix-rain"></div>
   
-  <div class="container">
-    <h1>WELCOME TO MICHAEL'S</h1>
+  <div class="container" role="main" aria-labelledby="title">
+    <h1 id="title">WELCOME TO MICHAEL'S</h1>
     <h2>Data-Stealing Website and Dating-Platform</h2>
     
-    <div class="warning">CRITICAL SECURITY BREACH</div>
+    <div class="warning" role="alert">CRITICAL SECURITY BREACH</div>
     
     <div class="message">
       <p>All files have been encrypted and exfiltrated.</p>
       <p>Thank you for your personal data!</p>
       <p>Photos, documents, messages, passwords — upload complete.</p>
       <p>Your camera was briefly accessed for verification.</p>
-      <p class="final-line">The talmudic network sends its regards.</p>
-    </div>
-    
-    <div class="progress-container">
-      <div class="progress"></div>
-    </div>
-    
-    <div class="countdown" id="timer">
-      Permanent deletion in: <span id="countdown">00:15</span>
+      <p class="final-line">The talmudic network sends it's regards</p>
     </div>
   </div>
 
   <script>
-    // Matrix rain
-    const matrix = document.getElementById('matrix');
+    // Complex Matrix rain effect
+    const rain = document.getElementById('matrix-rain');
     const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
-    const columns = Math.floor(window.innerWidth / 22);
+    const columns = Math.floor(window.innerWidth / 20);
     
     for (let i = 0; i < columns; i++) {
-      const drop = document.createElement('div');
-      drop.className = 'drop';
-      drop.textContent = Array(60).fill().map(() => chars[Math.floor(Math.random() * chars.length)]).join(' ');
-      drop.style.left = `${i * 22}px`;
-      drop.style.animationDuration = `${10 + Math.random() * 12}s`;
-      drop.style.animationDelay = `${Math.random() * 8}s`;
-      matrix.appendChild(drop);
-    }
-    
-    // Countdown
-    let time = 15;
-    const cd = document.getElementById('countdown');
-    const timerBox = document.getElementById('timer');
-    
-    const interval = setInterval(() => {
-      time--;
-      cd.textContent = `00:${time.toString().padStart(2, '0')}`;
-      if (time <= 0) {
-        clearInterval(interval);
-        timerBox.style.opacity = '0.5';
+      const column = document.createElement('div');
+      column.className = 'rain-column';
+      column.style.left = `${i * 20}px`;
+      column.style.animationDelay = `${Math.random() * 5}s`;
+      column.style.animationDuration = `${8 + Math.random() * 10}s`;
+      let text = '';
+      for (let j = 0; j < 50; j++) {
+        text += chars[Math.floor(Math.random() * chars.length)] + ' ';
       }
-    }, 1000);
+      column.textContent = text;
+      rain.appendChild(column);
+    }
   </script>
 </body>
 </html>
