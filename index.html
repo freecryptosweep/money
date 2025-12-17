@@ -90,12 +90,12 @@
       z-index: 10;
     }
 
-    /* Foreground Matrix rain - now on top of everything */
+    /* Even more sporadic foreground Matrix rain */
     #matrix-rain {
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      opacity: 0.6; /* Visible but doesn't completely obscure text */
+      opacity: 0.3; /* Further reduced opacity */
       z-index: 20;
       pointer-events: none;
       overflow: hidden;
@@ -104,13 +104,13 @@
     .rain-column {
       position: absolute;
       top: -100%;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: bold;
       color: var(--matrix-green);
-      text-shadow: 0 0 8px var(--matrix-green);
+      text-shadow: 0 0 5px var(--matrix-green);
       animation: rain-fall linear infinite;
       white-space: nowrap;
-      letter-spacing: 2px;
+      letter-spacing: 1.5px;
     }
 
     @keyframes rain-fall {
@@ -138,8 +138,8 @@
       .warning { font-size: 1.8rem; margin: 30px 0; }
       .message p { font-size: 1.25rem; margin: 25px 0; }
       .final-line { font-size: 1.4rem; margin-top: 50px; padding-top: 25px; }
-      #matrix-rain { opacity: 0.5; } /* Slightly less intense on small screens */
-      .rain-column { font-size: 0.9rem; }
+      #matrix-rain { opacity: 0.25; }
+      .rain-column { font-size: 0.85rem; }
     }
 
     @media (max-width: 360px) {
@@ -174,24 +174,28 @@
   </div>
 
   <script>
-    // Foreground Matrix rain repeating "you'll learn to love me"
+    // More sporadic foreground rain with "you'll learn to love me"
     const rain = document.getElementById('matrix-rain');
-    const phrase = "you'll learn to love me   "; // Spaces for separation
+    const phrase = "YOU'LL LEARN TO LOVE ME   ";
     const width = window.innerWidth;
-    const columnWidth = width < 480 ? 35 : 25;
-    const columns = Math.floor(width / columnWidth) + 2; // A few extra for coverage
+    
+    // Even fewer columns for more sporadic effect
+    const baseColumns = width < 480 ? 3 : 5;
+    const columns = baseColumns + Math.floor(Math.random() * 2); // Minimal randomization
     
     for (let i = 0; i < columns; i++) {
       const column = document.createElement('div');
       column.className = 'rain-column';
-      column.style.left = `${i * columnWidth + Math.random() * 20}px`;
-      column.style.animationDelay = `${Math.random() * 8}s`;
-      column.style.animationDuration = `${12 + Math.random() * 8}s`;
       
-      // Repeat the phrase many times vertically
+      // Wider random positioning for sparsity
+      column.style.left = `${Math.random() * 95}vw`;
+      column.style.animationDelay = `${Math.random() * 20}s`; // Longer delays for intermittency
+      column.style.animationDuration = `${20 + Math.random() * 20}s`; // Even slower speeds
+      
+      // Shorter repetition per column for lighter load
       let text = '';
-      for (let j = 0; j < 30; j++) {
-        text += phrase.toUpperCase() + '<br>';
+      for (let j = 0; j < 10; j++) {
+        text += phrase + '<br>';
       }
       column.innerHTML = text;
       
