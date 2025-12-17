@@ -90,12 +90,12 @@
       z-index: 10;
     }
 
-    /* Even more sporadic foreground Matrix rain */
+    /* Very subtle foreground rain */
     #matrix-rain {
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      opacity: 0.3; /* Further reduced opacity */
+      opacity: 0.25;
       z-index: 20;
       pointer-events: none;
       overflow: hidden;
@@ -103,18 +103,12 @@
 
     .rain-column {
       position: absolute;
-      top: -100%;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: bold;
       color: var(--matrix-green);
       text-shadow: 0 0 5px var(--matrix-green);
-      animation: rain-fall linear infinite;
       white-space: nowrap;
       letter-spacing: 1.5px;
-    }
-
-    @keyframes rain-fall {
-      to { transform: translateY(220vh); }
     }
 
     @keyframes glitch-multi {
@@ -133,20 +127,13 @@
     @media (max-width: 480px) {
       body { padding: 15px 10px; }
       .container { padding: 25px 15px; border-width: 2px; }
-      h1 { font-size: 1.9rem; letter-spacing: 0.1em; }
+      h1 { font-size: 1.9rem; }
       h2 { font-size: 1.6rem; margin-bottom: 30px; }
       .warning { font-size: 1.8rem; margin: 30px 0; }
       .message p { font-size: 1.25rem; margin: 25px 0; }
       .final-line { font-size: 1.4rem; margin-top: 50px; padding-top: 25px; }
-      #matrix-rain { opacity: 0.25; }
-      .rain-column { font-size: 0.85rem; }
-    }
-
-    @media (max-width: 360px) {
-      h1 { font-size: 1.7rem; }
-      h2 { font-size: 1.4rem; }
-      .warning { font-size: 1.6rem; }
-      .message p { font-size: 1.15rem; }
+      #matrix-rain { opacity: 0.2; }
+      .rain-column { font-size: 0.8rem; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -174,33 +161,42 @@
   </div>
 
   <script>
-    // More sporadic foreground rain with "you'll learn to love me"
+    // Very sporadic "YOU'LL LEARN TO LOVE ME" — roughly one new drop every 8–12 seconds
     const rain = document.getElementById('matrix-rain');
-    const phrase = "YOU'LL LEARN TO LOVE ME   ";
-    const width = window.innerWidth;
-    
-    // Even fewer columns for more sporadic effect
-    const baseColumns = width < 480 ? 3 : 5;
-    const columns = baseColumns + Math.floor(Math.random() * 2); // Minimal randomization
-    
-    for (let i = 0; i < columns; i++) {
+    const phrase = "YOU'LL LEARN TO LOVE ME";
+
+    function createDrop() {
       const column = document.createElement('div');
       column.className = 'rain-column';
       
-      // Wider random positioning for sparsity
-      column.style.left = `${Math.random() * 95}vw`;
-      column.style.animationDelay = `${Math.random() * 20}s`; // Longer delays for intermittency
-      column.style.animationDuration = `${20 + Math.random() * 20}s`; // Even slower speeds
+      // Random position across the screen
+      column.style.left = `${Math.random() * 90 + 5}vw`;
       
-      // Shorter repetition per column for lighter load
-      let text = '';
-      for (let j = 0; j < 10; j++) {
-        text += phrase + '<br>';
-      }
-      column.innerHTML = text;
+      // Random slight horizontal drift for more natural feel
+      column.style.animation = `rain-fall ${15 + Math.random() * 10}s linear forwards`;
+      
+      // Single line only — short and subtle
+      column.textContent = phrase;
       
       rain.appendChild(column);
+      
+      // Remove after animation ends to keep DOM clean
+      setTimeout(() => {
+        if (column.parentNode) {
+          column.parentNode.removeChild(column);
+        }
+      }, 30000); // Longer than animation duration
     }
+
+    // Start with one drop immediately
+    createDrop();
+
+    // Then add a new drop every 8–12 seconds on average
+    setInterval(() => {
+      if (Math.random() > 0.3) { // 70% chance to skip some intervals for extra sparsity
+        createDrop();
+      }
+    }, 10000); // Base interval ~10s, adjusted with randomness
   </script>
 </body>
 </html>
