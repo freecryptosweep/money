@@ -7,170 +7,347 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CRITICAL SECURITY BREACH</title>
   <style>
-    :root {
-      --primary-red: #ff0000;
-      --secondary-yellow: #ffff00;
-      --secondary-blue: #00ffff;
-      --background-dark: #000000;
-      --text-shadow-glow: 0 0 8px #ff0000, 0 0 16px #ff0000, 0 0 24px #ff0000;
-      --glitch-shadow-red: 2px 2px 0 #ff0000;
-      --glitch-shadow-blue: -2px -2px 0 #00ffff;
-      --matrix-green: #00ff44;
-    }
-
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
-      padding: 20px 15px;
-      background: var(--background-dark);
-      color: var(--primary-red);
       font-family: 'Courier New', Courier, monospace;
-      line-height: 1.7;
+      background: #000000;
+      color: #00ff00;
       min-height: 100vh;
       display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      overflow-x: hidden;
+      flex-direction: column;
+      padding: 20px;
       position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Intense matrix rain background */
+    #matrix-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      opacity: 0.6;
+    }
+
+    /* Scanline effect */
+    .scanline {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        to bottom,
+        transparent 50%,
+        rgba(0, 255, 0, 0.03) 51%
+      );
+      background-size: 100% 4px;
+      z-index: 2;
+      pointer-events: none;
+      animation: scan 8s linear infinite;
+    }
+
+    @keyframes scan {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(4px); }
+    }
+
+    /* Screen flicker */
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      41.99% { opacity: 1; }
+      42% { opacity: 0.8; }
+      43% { opacity: 1; }
+      45.99% { opacity: 1; }
+      46% { opacity: 0.9; }
+      46.5% { opacity: 1; }
     }
 
     .container {
-      max-width: 800px;
+      flex: 1;
+      max-width: 1000px;
       width: 100%;
-      text-align: center;
-      padding: 30px 20px;
-      border: 3px solid var(--primary-red);
-      border-radius: 15px;
-      background: rgba(10,0,0,0.92);
-      box-shadow: 0 0 30px rgba(255,0,0,0.4), inset 0 0 20px rgba(255,0,0,0.2);
+      margin: 0 auto;
+      background: rgba(0, 0, 0, 0.85);
+      border: 2px solid #00ff00;
+      padding: 40px 30px;
       position: relative;
       z-index: 10;
+      box-shadow: 
+        0 0 20px rgba(0, 255, 0, 0.3),
+        inset 0 0 100px rgba(0, 255, 0, 0.03);
+      animation: flicker 5s infinite;
+    }
+
+    /* Terminal header */
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #00ff00;
+    }
+
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #00ff00;
+      box-shadow: 0 0 10px #00ff00;
+      animation: pulse-glow 2s infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% {
+        box-shadow: 0 0 10px #00ff00;
+      }
+      50% {
+        box-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00;
+      }
+    }
+
+    .terminal-title {
+      font-size: 0.9rem;
+      color: #00ff00;
+      text-transform: uppercase;
+      letter-spacing: 2px;
     }
 
     h1 {
-      font-size: 2.2rem;
-      margin: 0 0 15px;
-      letter-spacing: 0.15em;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: #ff0000;
       text-transform: uppercase;
-      text-shadow: var(--text-shadow-glow);
-      animation: glitch-multi 3s infinite alternate;
-      color: var(--secondary-yellow);
+      letter-spacing: 4px;
+      text-shadow: 
+        0 0 10px #ff0000,
+        0 0 20px #ff0000,
+        0 0 30px #ff0000,
+        0 0 40px #ff0000;
+      animation: glitch 1s infinite;
+    }
+
+    @keyframes glitch {
+      0%, 100% {
+        text-shadow: 
+          0 0 10px #ff0000,
+          0 0 20px #ff0000,
+          0 0 30px #ff0000;
+        transform: translate(0);
+      }
+      20% {
+        text-shadow: 
+          3px 0 10px #ff0000,
+          -3px 0 20px #00ffff;
+        transform: translate(-2px, 2px);
+      }
+      40% {
+        text-shadow: 
+          -3px 0 10px #ff0000,
+          3px 0 20px #ff00ff;
+        transform: translate(2px, -2px);
+      }
+      60% {
+        text-shadow: 
+          0 0 10px #ff0000,
+          0 0 20px #ff0000;
+        transform: translate(-1px, 1px);
+      }
     }
 
     h2 {
-      font-size: 1.9rem;
-      margin: 0 0 40px;
-      letter-spacing: 0.12em;
-      text-shadow: var(--text-shadow-glow);
-      animation: glitch-multi 2.8s infinite alternate;
-      color: var(--secondary-yellow);
+      font-size: 1.3rem;
+      margin-bottom: 40px;
+      color: #ff0000;
+      letter-spacing: 2px;
+      opacity: 0.9;
     }
 
-    .warning {
-      font-size: 2.1rem;
+    .warning-box {
+      background: rgba(255, 0, 0, 0.1);
+      border: 3px solid #ff0000;
+      padding: 30px;
       margin: 40px 0;
-      letter-spacing: 0.08em;
-      text-shadow: var(--text-shadow-glow);
-      animation: pulse-glow 2s infinite alternate;
-    }
-
-    .message p {
-      font-size: 1.35rem;
-      margin: 30px 0;
-      text-shadow: 0 0 12px var(--primary-red);
-      padding: 0 10px;
       position: relative;
-      z-index: 10;
-    }
-
-    /* Progress bar styling */
-    .progress-container {
-      margin: 40px auto;
-      max-width: 500px;
-    }
-
-    .progress-label {
-      font-size: 1.1rem;
-      margin-bottom: 10px;
-      text-align: left;
-      color: var(--matrix-green);
-    }
-
-    .progress-bar {
-      width: 100%;
-      height: 30px;
-      background: rgba(0,0,0,0.5);
-      border: 2px solid var(--matrix-green);
-      border-radius: 5px;
       overflow: hidden;
-      position: relative;
     }
 
-    .progress-fill {
+    .warning-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
       height: 100%;
       background: linear-gradient(90deg, 
-        var(--matrix-green) 0%, 
-        #00cc33 50%, 
-        var(--matrix-green) 100%);
-      width: 0%;
-      transition: width 0.3s ease;
-      box-shadow: 0 0 10px var(--matrix-green);
+        transparent,
+        rgba(255, 0, 0, 0.1),
+        transparent
+      );
+      animation: sweep 3s infinite;
     }
 
-    .progress-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 0.9rem;
-      font-weight: bold;
-      color: #fff;
-      text-shadow: 0 0 5px #000;
+    @keyframes sweep {
+      0% { left: -100%; }
+      100% { left: 200%; }
+    }
+
+    .warning-title {
+      font-size: 2rem;
+      color: #ff0000;
+      text-align: center;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      text-shadow: 
+        0 0 10px #ff0000,
+        0 0 20px #ff0000;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 49%, 100% { opacity: 1; }
+      50%, 99% { opacity: 0.3; }
+    }
+
+    .message {
+      position: relative;
       z-index: 1;
     }
 
-    /* File list styling */
-    .file-list {
-      margin: 30px auto;
-      max-width: 500px;
-      text-align: left;
-      font-size: 0.9rem;
-      max-height: 200px;
+    .message p {
+      font-size: 1.2rem;
+      margin: 25px 0;
+      color: #00ff00;
+      line-height: 1.8;
+      text-shadow: 0 0 5px #00ff00;
+    }
+
+    /* Progress section */
+    .progress-section {
+      background: rgba(0, 0, 0, 0.7);
+      border: 2px solid #00ff00;
+      padding: 25px;
+      margin: 40px 0;
+      position: relative;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      color: #00ff00;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .progress-percentage {
+      font-size: 1.8rem;
+      font-weight: bold;
+      text-shadow: 0 0 10px #00ff00;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 25px;
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid #00ff00;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: #00ff00;
+      width: 0%;
+      transition: width 0.3s ease;
+      box-shadow: 
+        0 0 10px #00ff00,
+        0 0 20px #00ff00,
+        inset 0 0 10px rgba(255, 255, 255, 0.5);
+      position: relative;
+    }
+
+    .progress-bar-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.6) 50%,
+        transparent 100%
+      );
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(200%); }
+    }
+
+    /* File list */
+    .file-list-container {
+      margin-top: 20px;
+      max-height: 250px;
       overflow-y: auto;
-      border: 1px solid var(--primary-red);
+      border: 1px solid #00ff00;
+      background: rgba(0, 0, 0, 0.5);
       padding: 15px;
-      background: rgba(0,0,0,0.3);
-      color: var(--matrix-green);
+    }
+
+    .file-list-container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .file-list-container::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .file-list-container::-webkit-scrollbar-thumb {
+      background: #00ff00;
+      box-shadow: 0 0 5px #00ff00;
     }
 
     .file-item {
-      padding: 5px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(0, 255, 0, 0.2);
       opacity: 0;
-      animation: fadeIn 0.3s forwards;
+      animation: slideIn 0.4s forwards;
+      color: #00ff00;
+      font-size: 0.95rem;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
 
     .file-item::before {
-      content: "✓ ";
-      color: var(--matrix-green);
-      margin-right: 5px;
-    }
-
-    .final-line {
-      font-size: 1.5rem;
-      margin-top: 60px;
-      text-shadow: var(--text-shadow-glow);
-      border-top: 2px dashed var(--primary-red);
-      padding-top: 30px;
-      position: relative;
-      z-index: 10;
-      opacity: 0;
-    }
-
-    .final-line.visible {
-      animation: fadeIn 1s forwards;
+      content: '>';
+      color: #00ff00;
+      font-weight: bold;
     }
 
     /* Webcam indicator */
@@ -178,21 +355,25 @@
       position: fixed;
       top: 20px;
       right: 20px;
-      background: rgba(255,0,0,0.9);
-      color: white;
-      padding: 10px 15px;
-      border-radius: 5px;
-      font-size: 0.9rem;
+      background: rgba(255, 0, 0, 0.95);
+      color: #fff;
+      padding: 15px 20px;
+      border: 2px solid #ff0000;
+      font-size: 1rem;
       display: none;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       z-index: 100;
-      box-shadow: 0 0 20px rgba(255,0,0,0.8);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      box-shadow: 
+        0 0 20px rgba(255, 0, 0, 0.8),
+        0 0 40px rgba(255, 0, 0, 0.5);
+      animation: pulse-glow 1.5s infinite;
     }
 
     .webcam-indicator.active {
       display: flex;
-      animation: pulse-glow 1.5s infinite;
     }
 
     .webcam-dot {
@@ -203,38 +384,16 @@
       animation: blink 1s infinite;
     }
 
-    /* Matrix rain */
-    #matrix-rain {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      opacity: 0.25;
-      z-index: 20;
-      pointer-events: none;
-      overflow: hidden;
+    .final-section {
+      margin-top: 50px;
+      padding-top: 30px;
+      border-top: 2px solid #00ff00;
+      text-align: center;
+      opacity: 0;
     }
 
-    .rain-column {
-      position: absolute;
-      font-size: 0.9rem;
-      font-weight: bold;
-      color: var(--matrix-green);
-      text-shadow: 0 0 5px var(--matrix-green);
-      white-space: nowrap;
-      letter-spacing: 1.5px;
-    }
-
-    @keyframes glitch-multi {
-      0%, 100% { text-shadow: var(--glitch-shadow-red), var(--glitch-shadow-blue); }
-      20% { text-shadow: -2px 2px 0 #ff00ff, 2px -2px 0 #00ff00; }
-      40% { text-shadow: 2px -2px 0 #00ffff, -2px 2px 0 #ff00ff; }
-      60% { text-shadow: var(--glitch-shadow-blue), var(--glitch-shadow-red); }
-      80% { text-shadow: -1px -1px 0 #ffff00, 1px 1px 0 #ff0000; }
-    }
-
-    @keyframes pulse-glow {
-      from { text-shadow: var(--text-shadow-glow); }
-      to { text-shadow: 0 0 12px #ff0000, 0 0 24px #ff0000, 0 0 36px #ff0000; }
+    .final-section.visible {
+      animation: fadeIn 1.5s forwards;
     }
 
     @keyframes fadeIn {
@@ -242,66 +401,248 @@
       to { opacity: 1; }
     }
 
-    @keyframes blink {
-      0%, 49% { opacity: 1; }
-      50%, 100% { opacity: 0.3; }
+    .final-message {
+      font-size: 1.5rem;
+      color: #ff0000;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      text-shadow: 
+        0 0 10px #ff0000,
+        0 0 20px #ff0000;
+      font-style: italic;
     }
 
-    @media (max-width: 480px) {
-      body { padding: 15px 10px; }
-      .container { padding: 25px 15px; border-width: 2px; }
-      h1 { font-size: 1.9rem; }
-      h2 { font-size: 1.6rem; margin-bottom: 30px; }
-      .warning { font-size: 1.8rem; margin: 30px 0; }
-      .message p { font-size: 1.25rem; margin: 25px 0; }
-      .final-line { font-size: 1.4rem; margin-top: 50px; padding-top: 25px; }
-      #matrix-rain { opacity: 0.2; }
-      .rain-column { font-size: 0.8rem; }
-      .progress-container { font-size: 0.9rem; }
-      .file-list { font-size: 0.8rem; max-height: 150px; }
-      .webcam-indicator { top: 10px; right: 10px; font-size: 0.8rem; }
+    /* Navigation menu */
+    .nav-menu {
+      width: 100%;
+      max-width: 1000px;
+      margin: 30px auto 0;
+      background: rgba(0, 0, 0, 0.85);
+      border: 2px solid #00ff00;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      position: relative;
+      z-index: 10;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    }
+
+    .nav-link {
+      color: #00ff00;
+      text-decoration: none;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 10px 20px;
+      border: 1px solid #00ff00;
+      background: rgba(0, 255, 0, 0.05);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      text-shadow: 0 0 5px #00ff00;
+    }
+
+    .nav-link::before {
+      content: '>';
+      position: absolute;
+      left: 10px;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+      background: rgba(0, 255, 0, 0.2);
+      box-shadow: 
+        0 0 10px #00ff00,
+        inset 0 0 10px rgba(0, 255, 0, 0.2);
+      padding-left: 30px;
+      text-shadow: 0 0 10px #00ff00;
+    }
+
+    .nav-link:hover::before {
+      opacity: 1;
+      left: 10px;
+    }
+
+    .nav-link:active {
+      transform: scale(0.98);
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+
+      .container {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 2rem;
+        letter-spacing: 2px;
+      }
+
+      h2 {
+        font-size: 1.1rem;
+      }
+
+      .warning-title {
+        font-size: 1.5rem;
+      }
+
+      .message p {
+        font-size: 1.1rem;
+      }
+
+      .nav-menu {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+      }
+
+      .nav-link {
+        text-align: center;
+        font-size: 1rem;
+      }
+
+      .webcam-indicator {
+        top: 10px;
+        right: 10px;
+        font-size: 0.85rem;
+        padding: 12px 16px;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      * { animation: none !important; }
-      #matrix-rain { display: none; }
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+      #matrix-canvas,
+      .scanline {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
-  <div id="matrix-rain"></div>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="scanline"></div>
   
   <div class="webcam-indicator" id="webcamIndicator">
     <div class="webcam-dot"></div>
     <span>CAMERA ACTIVE</span>
   </div>
   
-  <div class="container" role="main">
+  <div class="container">
+    <div class="terminal-header">
+      <div class="terminal-dot"></div>
+      <div class="terminal-dot"></div>
+      <div class="terminal-dot"></div>
+      <span class="terminal-title">System Breach Detected</span>
+    </div>
+
     <h1>WELCOME TO MICHAEL'S</h1>
     <h2>Data-Stealing Website and Dating-Platform</h2>
     
-    <div class="warning" role="alert">CRITICAL SECURITY BREACH</div>
-    
-    <div class="message">
-      <p>All files have been encrypted and exfiltrated.</p>
+    <div class="warning-box">
+      <div class="warning-title">⚠ CRITICAL SECURITY BREACH ⚠</div>
       
-      <div class="progress-container">
-        <div class="progress-label">UPLOAD PROGRESS:</div>
-        <div class="progress-bar">
-          <div class="progress-fill" id="progressFill"></div>
-          <div class="progress-text" id="progressText">0%</div>
-        </div>
+      <div class="message">
+        <p>All files have been encrypted and exfiltrated.</p>
+      </div>
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-header">
+        <span>UPLOAD PROGRESS:</span>
+        <span class="progress-percentage" id="progressPercentage">0%</span>
+      </div>
+      
+      <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="progressFill"></div>
       </div>
 
-      <div class="file-list" id="fileList"></div>
-      
+      <div class="file-list-container" id="fileListContainer"></div>
+    </div>
+
+    <div class="message">
       <p>Thank you for your personal data!</p>
       <p>Photos, documents, messages, passwords — upload complete.</p>
-      <p class="final-line" id="finalLine">The talmudic network sends its regards</p>
+    </div>
+
+    <div class="final-section" id="finalSection">
+      <p class="final-message">The talmudic network sends its regards</p>
     </div>
   </div>
 
+  <nav class="nav-menu">
+    <a href="gallery.html" class="nav-link">Gallery</a>
+    <a href="literature.html" class="nav-link">Literature</a>
+  </nav>
+
   <script>
+    // Matrix rain canvas
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const phrase = "YOU'LL LEARN TO LOVE ME";
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = [];
+    const messages = [];
+
+    for (let i = 0; i < columns; i++) {
+      drops[i] = Math.floor(Math.random() * canvas.height / fontSize);
+      messages[i] = '';
+    }
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#00ff00';
+      ctx.font = fontSize + 'px monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+        // Sometimes show the phrase, sometimes random characters
+        let text;
+        if (Math.random() > 0.98) {
+          // Start showing the phrase
+          messages[i] = phrase;
+        }
+        
+        if (messages[i]) {
+          text = messages[i].charAt(drops[i] % messages[i].length);
+        } else {
+          // Random matrix characters
+          text = String.fromCharCode(0x30A0 + Math.random() * 96);
+        }
+
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+          messages[i] = '';
+        }
+
+        drops[i]++;
+      }
+    }
+
+    setInterval(drawMatrix, 50);
+
+    // Resize canvas on window resize
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
     // Fake files to display
     const fakeFiles = [
       "passwords.txt",
@@ -316,103 +657,50 @@
       "email_archive.mbox"
     ];
 
-    // Progress bar animation
+    // Progress animation
     let progress = 0;
     const progressFill = document.getElementById('progressFill');
-    const progressText = document.getElementById('progressText');
-    const fileList = document.getElementById('fileList');
+    const progressPercentage = document.getElementById('progressPercentage');
+    const fileListContainer = document.getElementById('fileListContainer');
     const webcamIndicator = document.getElementById('webcamIndicator');
-    const finalLine = document.getElementById('finalLine');
+    const finalSection = document.getElementById('finalSection');
 
     function updateProgress() {
       if (progress < 100) {
-        // Random increment between 3-8%
         progress += Math.floor(Math.random() * 6) + 3;
         if (progress > 100) progress = 100;
         
         progressFill.style.width = progress + '%';
-        progressText.textContent = progress + '%';
+        progressPercentage.textContent = progress + '%';
         
-        // Add a random file
         if (fakeFiles.length > 0 && Math.random() > 0.3) {
           const file = fakeFiles.shift();
           const fileItem = document.createElement('div');
           fileItem.className = 'file-item';
           fileItem.textContent = file;
-          fileList.appendChild(fileItem);
-          fileList.scrollTop = fileList.scrollHeight;
+          fileListContainer.appendChild(fileItem);
+          fileListContainer.scrollTop = fileListContainer.scrollHeight;
         }
         
-        // Continue updating
         setTimeout(updateProgress, 400 + Math.random() * 600);
       } else {
-        // Show final message
         setTimeout(() => {
-          finalLine.classList.add('visible');
+          finalSection.classList.add('visible');
         }, 1000);
       }
     }
 
-    // Start progress after short delay
     setTimeout(() => {
       updateProgress();
     }, 1500);
 
-    // Show webcam indicator briefly
+    // Webcam indicator
     setTimeout(() => {
       webcamIndicator.classList.add('active');
       setTimeout(() => {
         webcamIndicator.classList.remove('active');
       }, 3000);
     }, 2000);
-
-    // Matrix rain effect
-    const rain = document.getElementById('matrix-rain');
-    const phrase = "YOU'LL LEARN TO LOVE ME";
-
-    function createDrop() {
-      const column = document.createElement('div');
-      column.className = 'rain-column';
-      column.style.left = `${Math.random() * 90 + 5}vw`;
-      column.style.animation = `rain-fall ${15 + Math.random() * 10}s linear forwards`;
-      column.textContent = phrase;
-      rain.appendChild(column);
-      
-      setTimeout(() => {
-        if (column.parentNode) {
-          column.parentNode.removeChild(column);
-        }
-      }, 30000);
-    }
-
-    createDrop();
-    setInterval(() => {
-      if (Math.random() > 0.3) {
-        createDrop();
-      }
-    }, 10000);
-
-    // Add CSS animation for rain falling
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes rain-fall {
-        from {
-          transform: translateY(-100%);
-          opacity: 0;
-        }
-        5% {
-          opacity: 1;
-        }
-        95% {
-          opacity: 1;
-        }
-        to {
-          transform: translateY(100vh);
-          opacity: 0;
-        }
-      }
-    `;
-    document.head.appendChild(style);
   </script>
 </body>
 </html>
