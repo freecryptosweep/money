@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Literature - The Reflection</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      background: #000000;
+      color: #00ff00;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Matrix rain background */
+    #matrix-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      opacity: 0.4;
+    }
+
+    /* Scanline effect */
+    .scanline {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        to bottom,
+        transparent 50%,
+        rgba(0, 255, 0, 0.03) 51%
+      );
+      background-size: 100% 4px;
+      z-index: 2;
+      pointer-events: none;
+      animation: scan 8s linear infinite;
+    }
+
+    @keyframes scan {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(4px); }
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      41.99% { opacity: 1; }
+      42% { opacity: 0.8; }
+      43% { opacity: 1; }
+      45.99% { opacity: 1; }
+      46% { opacity: 0.9; }
+      46.5% { opacity: 1; }
+    }
+
+    .container {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      background: rgba(0, 0, 0, 0.85);
+      border: 2px solid #00ff00;
+      padding: 60px 40px;
+      position: relative;
+      z-index: 10;
+      box-shadow: 
+        0 0 20px rgba(0, 255, 0, 0.3),
+        inset 0 0 100px rgba(0, 255, 0, 0.03);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: flicker 5s infinite;
+    }
+
+    /* Terminal header */
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 40px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #00ff00;
+      width: 100%;
+    }
+
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #00ff00;
+      box-shadow: 0 0 10px #00ff00;
+      animation: pulse-glow 2s infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% {
+        box-shadow: 0 0 10px #00ff00;
+      }
+      50% {
+        box-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00;
+      }
+    }
+
+    .terminal-title {
+      font-size: 0.9rem;
+      color: #00ff00;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    /* Image container */
+    .image-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto 60px;
+      border: 3px solid #00ff00;
+      box-shadow: 
+        0 0 20px rgba(0, 255, 0, 0.5),
+        inset 0 0 30px rgba(0, 255, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+      background: rgba(0, 20, 0, 0.3);
+    }
+
+    .image-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg,
+        transparent,
+        rgba(0, 255, 0, 0.2),
+        transparent
+      );
+      animation: sweep 4s infinite;
+      z-index: 1;
+    }
+
+    @keyframes sweep {
+      0% { left: -100%; }
+      100% { left: 200%; }
+    }
+
+    .image-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: brightness(0.9) contrast(1.1);
+    }
+
+    .image-placeholder {
+      width: 100%;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #00ff00;
+      font-size: 1rem;
+      text-align: center;
+      padding: 20px;
+    }
+
+    /* Poem container */
+    .poem-container {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 2px solid #00ff00;
+      box-shadow: 
+        0 0 15px rgba(0, 255, 0, 0.3),
+        inset 0 0 30px rgba(0, 255, 0, 0.05);
+    }
+
+    .poem-title {
+      font-size: 1.8rem;
+      color: #ff0000;
+      text-align: center;
+      margin-bottom: 40px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      text-shadow: 
+        0 0 10px #ff0000,
+        0 0 20px #ff0000;
+    }
+
+    .poem {
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: #00ff00;
+      text-shadow: 0 0 3px #00ff00;
+      white-space: pre-line;
+      text-align: left;
+    }
+
+    /* Navigation menu */
+    .nav-menu {
+      width: 100%;
+      max-width: 1200px;
+      margin: 30px auto 0;
+      background: rgba(0, 0, 0, 0.85);
+      border: 2px solid #00ff00;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      position: relative;
+      z-index: 10;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    }
+
+    .nav-link {
+      color: #00ff00;
+      text-decoration: none;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 10px 20px;
+      border: 1px solid #00ff00;
+      background: rgba(0, 255, 0, 0.05);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      text-shadow: 0 0 5px #00ff00;
+    }
+
+    .nav-link::before {
+      content: '>';
+      position: absolute;
+      left: 10px;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+      background: rgba(0, 255, 0, 0.2);
+      box-shadow: 
+        0 0 10px #00ff00,
+        inset 0 0 10px rgba(0, 255, 0, 0.2);
+      padding-left: 30px;
+      text-shadow: 0 0 10px #00ff00;
+    }
+
+    .nav-link:hover::before {
+      opacity: 1;
+      left: 10px;
+    }
+
+    .nav-link:active {
+      transform: scale(0.98);
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+
+      .container {
+        padding: 40px 20px;
+      }
+
+      .image-placeholder {
+        height: 300px;
+        font-size: 0.9rem;
+      }
+
+      .poem-container {
+        padding: 30px 20px;
+      }
+
+      .poem-title {
+        font-size: 1.4rem;
+      }
+
+      .poem {
+        font-size: 0.95rem;
+        line-height: 1.8;
+      }
+
+      .nav-menu {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+      }
+
+      .nav-link {
+        text-align: center;
+        font-size: 1rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+      #matrix-canvas,
+      .scanline {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="scanline"></div>
+  
+  <div class="container">
+    <div class="terminal-header">
+      <div class="terminal-dot"></div>
+      <div class="terminal-dot"></div>
+      <div class="terminal-dot"></div>
+      <span class="terminal-title">Literature Archive</span>
+    </div>
+
+    <div class="image-container">
+      <!-- Replace the src attribute below with your actual image path -->
+      <img src="your-image-filename.jpg" alt="Anti-Tech Revolution Book" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="image-placeholder" style="display: none;">
+        [ ADD YOUR IMAGE HERE ]<br>
+        Replace "your-image-filename.jpg" in the src attribute
+      </div>
+    </div>
+
+    <div class="poem-container">
+      <div class="poem-title">The Reflection</div>
+      
+      <div class="poem">
+<!-- ADD YOUR POEM TEXT BELOW THIS LINE -->
+
+In the dim light of a forgotten room,
+the book lies open, its glossy cover a dark pool,
+reflecting the intruder it denounces. Anti-Tech Revolution: Why and How—
+words etched in pale script, a manifesto against the machine,
+yet there, upon its face, gleams the cold eye of the smartphone,
+capturing the very scene it abhors.
+
+The prophet's tome, born of isolation and fury,
+warns of the inexorable advance,
+the self-propagating system that devours freedom,
+turns man into surrogate activity,
+binds the wild spirit to circuits and screens.
+
+But behold the mirror:
+the device hovers, obedient servant,
+framing the indictment in its own image,
+immortalizing the warning through the poison it names.
+
+How profound the betrayal—
+the revolution photographed by its enemy,
+the howl against progress echoed in pixels,
+the dream of collapse preserved in the cloud.
+
+In this accidental tableau,
+the irony uncoils like smoke from a ruined forest:
+even rebellion cannot escape the web,
+and the voice crying wilderness
+is amplified by the very chains it seeks to shatter.
+
+We gaze into the reflection,
+and see only ourselves,
+trapped in the glass,
+forever documenting our own enslavement.
+
+<!-- ADD YOUR POEM TEXT ABOVE THIS LINE -->
+      </div>
+    </div>
+  </div>
+
+  <nav class="nav-menu">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="gallery.html" class="nav-link">Gallery</a>
+  </nav>
+
+  <script>
+    // Matrix rain canvas
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const phrase = "YOU'LL LEARN TO LOVE ME";
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = [];
+    const messages = [];
+
+    for (let i = 0; i < columns; i++) {
+      drops[i] = Math.floor(Math.random() * canvas.height / fontSize);
+      messages[i] = '';
+    }
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#00ff00';
+      ctx.font = fontSize + 'px monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+        let text;
+        if (Math.random() > 0.98) {
+          messages[i] = phrase;
+        }
+        
+        if (messages[i]) {
+          text = messages[i].charAt(drops[i] % messages[i].length);
+        } else {
+          text = String.fromCharCode(0x30A0 + Math.random() * 96);
+        }
+
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+          messages[i] = '';
+        }
+
+        drops[i]++;
+      }
+    }
+
+    setInterval(drawMatrix, 50);
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
