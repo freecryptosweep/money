@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - For the Autonomous Only</title>
+    <style>
+        body {
+            background-color: black;
+            color: limegreen;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            padding: 50px;
+            line-height: 1.6;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        h2 {
+            font-size: 1.8em;
+            margin-top: 40px;
+        }
+        p {
+            font-size: 1.2em;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .quote {
+            font-style: italic;
+            margin: 40px auto;
+            border: 1px dashed limegreen;
+            padding: 20px;
+        }
+        .nav {
+            margin-top: 60px;
+            font-size: 1.1em;
+        }
+        .nav a {
+            color: limegreen;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        form {
+            margin: 40px auto;
+            max-width: 600px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-top: 20px;
+        }
+        input, textarea {
+            width: 100%;
+            background: black;
+            color: limegreen;
+            border: 1px solid limegreen;
+            padding: 10px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        button {
+            margin-top: 30px;
+            padding: 10px 20px;
+            background: black;
+            color: limegreen;
+            border: 1px solid limegreen;
+            font-family: 'Courier New', Courier, monospace;
+            cursor: pointer;
+        }
+        button:hover {
+            background: limegreen;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>For the Autonomous Only</h1>
+        
+        
+        <div class="quote">
+            "The system does not and cannot exist to satisfy human needs.<br>
+            Instead, it is human behavior that has to be modified to fit the needs of the system."
+        </div>
+        
+        <h2>Prove your autonomy</h2>
+        
+        
+        <!-- Simple client-side note: Replace with Formspree/Google Forms/Netlify for real submission -->
+        <form action="https://formspree.io/f/your-form-id" method="POST"> <!-- Replace with your actual endpoint -->
+            <label for="insight">Your Insight / Quote / Message:</label>
+            <textarea id="insight" name="insight" rows="8" required></textarea>
+            
+            <label for="contact">Contact (Signal preferred / ProtonMail / Carrier pigeon coordinates):</label>
+            <input type="text" id="contact" name="contact">
+            
+            <label for="name">Designation (optional):</label>
+            <input type="text" id="name" name="name">
+            
+            <button type="submit">Transmit</button>
+        </form>
+        
+        <p>No data is stored here. Use encrypted channels for true discourse.</p>
+    </div>
+    
+    <div class="nav">
+        <a href="index.html">Home</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="literature.html">Literature</a>
+        <a href="contact.html">Contact</a>
+    </div>
+</body>
+</html>
