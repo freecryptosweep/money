@@ -25,7 +25,6 @@
       overflow-x: hidden;
     }
 
-    /* Matrix rain background */
     #matrix-canvas {
       position: fixed;
       top: 0;
@@ -36,7 +35,6 @@
       opacity: 0.4;
     }
 
-    /* Scanline effect */
     .scanline {
       position: fixed;
       top: 0;
@@ -85,7 +83,6 @@
       animation: flicker 5s infinite;
     }
 
-    /* Terminal header */
     .terminal-header {
       display: flex;
       align-items: center;
@@ -120,41 +117,66 @@
       letter-spacing: 2px;
     }
 
+    .system-info {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 0.75rem;
+      color: #00ff00;
+      opacity: 0.7;
+      text-align: right;
+    }
+
+    .system-info div {
+      margin-bottom: 5px;
+    }
+
     .page-title {
       font-size: 2.5rem;
       color: #ff0000;
       text-align: center;
-      margin-bottom: 50px;
+      margin-bottom: 20px;
       text-transform: uppercase;
       letter-spacing: 4px;
       text-shadow: 
         0 0 10px #ff0000,
         0 0 20px #ff0000,
         0 0 30px #ff0000;
-      animation: glitch 1s infinite;
+      animation: glitch 3s infinite;
+      position: relative;
+    }
+
+    .page-title::after {
+      content: '_';
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
     }
 
     @keyframes glitch {
-      0%, 100% {
+      0%, 90%, 100% {
         text-shadow: 
           0 0 10px #ff0000,
           0 0 20px #ff0000,
           0 0 30px #ff0000;
         transform: translate(0);
       }
-      20% {
+      92% {
         text-shadow: 
           3px 0 10px #ff0000,
           -3px 0 20px #00ffff;
         transform: translate(-2px, 2px);
       }
-      40% {
+      94% {
         text-shadow: 
           -3px 0 10px #ff0000,
           3px 0 20px #ff00ff;
         transform: translate(2px, -2px);
       }
-      60% {
+      96% {
         text-shadow: 
           0 0 10px #ff0000,
           0 0 20px #ff0000;
@@ -162,7 +184,33 @@
       }
     }
 
-    /* Gallery grid */
+    .gallery-subtitle {
+      text-align: center;
+      color: #00ff00;
+      margin-bottom: 40px;
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      opacity: 0.8;
+    }
+
+    .image-counter {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #00ff00;
+      font-size: 1rem;
+      letter-spacing: 2px;
+      padding: 10px;
+      border: 1px solid #00ff00;
+      display: inline-block;
+      background: rgba(0, 255, 0, 0.05);
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+    }
+
+    .counter-container {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -179,6 +227,7 @@
         0 0 20px rgba(0, 255, 0, 0.5),
         inset 0 0 30px rgba(0, 255, 0, 0.1);
       transition: all 0.3s ease;
+      cursor: pointer;
     }
 
     .gallery-item:hover {
@@ -228,7 +277,7 @@
     }
 
     .gallery-item:hover .gallery-image {
-      filter: brightness(1.1) contrast(1.2);
+      filter: brightness(1.1) contrast(1.2) saturate(1.2);
     }
 
     .image-placeholder {
@@ -257,7 +306,7 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background: rgba(0, 0, 0, 0.85);
+      background: rgba(0, 0, 0, 0.9);
       border-top: 2px solid #00ff00;
       padding: 15px;
       color: #00ff00;
@@ -267,15 +316,104 @@
       font-size: 0.9rem;
       text-shadow: 0 0 5px #00ff00;
       z-index: 2;
+      transition: all 0.3s ease;
     }
 
     .gallery-item:hover .gallery-caption {
-      background: rgba(255, 0, 0, 0.85);
+      background: rgba(255, 0, 0, 0.9);
       border-top-color: #ff0000;
       color: #fff;
+      padding: 20px 15px;
+      text-shadow: 0 0 10px #ff0000;
     }
 
-    /* Navigation menu */
+    .loading-indicator {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #00ff00;
+      font-size: 1.2rem;
+      z-index: 3;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .gallery-item.loading .loading-indicator {
+      opacity: 1;
+    }
+
+    /* Lightbox Modal */
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .lightbox-content {
+      position: relative;
+      max-width: 90%;
+      max-height: 90vh;
+      border: 3px solid #ff0000;
+      box-shadow: 0 0 50px rgba(255, 0, 0, 0.8);
+    }
+
+    .lightbox-image {
+      max-width: 100%;
+      max-height: 90vh;
+      display: block;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      color: #ff0000;
+      font-size: 2rem;
+      cursor: pointer;
+      background: rgba(0, 0, 0, 0.8);
+      border: 2px solid #ff0000;
+      padding: 5px 15px;
+      transition: all 0.3s;
+    }
+
+    .lightbox-close:hover {
+      background: rgba(255, 0, 0, 0.3);
+      transform: scale(1.1);
+    }
+
+    .lightbox-caption {
+      position: absolute;
+      bottom: -50px;
+      left: 0;
+      right: 0;
+      color: #ff0000;
+      text-align: center;
+      font-size: 1.2rem;
+      letter-spacing: 3px;
+      text-shadow: 0 0 10px #ff0000;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 15px;
+      border: 2px solid #ff0000;
+    }
+
     .nav-menu {
       width: 100%;
       max-width: 1400px;
@@ -332,7 +470,6 @@
       transform: scale(0.98);
     }
 
-    /* Responsive design */
     @media (max-width: 768px) {
       body {
         padding: 10px;
@@ -340,6 +477,12 @@
 
       .container {
         padding: 40px 20px;
+      }
+
+      .system-info {
+        position: static;
+        text-align: center;
+        margin-bottom: 20px;
       }
 
       .page-title {
@@ -367,6 +510,10 @@
         text-align: center;
         font-size: 1rem;
       }
+
+      .lightbox-caption {
+        font-size: 0.9rem;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -386,6 +533,12 @@
   <div class="scanline"></div>
   
   <div class="container">
+    <div class="system-info">
+      <div>SYSTEM: ONLINE</div>
+      <div>FILES: <span id="fileCount">6</span></div>
+      <div>STATUS: CLASSIFIED</div>
+    </div>
+
     <div class="terminal-header">
       <div class="terminal-dot"></div>
       <div class="terminal-dot"></div>
@@ -394,65 +547,78 @@
     </div>
 
     <h1 class="page-title">Gallery</h1>
+    <div class="gallery-subtitle">[ CLASSIFIED FELINE INTELLIGENCE ]</div>
+
+    <div class="counter-container">
+      <div class="image-counter">
+        <span id="loadedCount">0</span> / <span id="totalCount">6</span> FILES LOADED
+      </div>
+    </div>
 
     <div class="gallery-grid">
       
       <!-- GALLERY ITEM 1 -->
-      <div class="gallery-item">
-        <img src="image000000.gif" alt="Gallery Image 1" class="gallery-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="gallery-item" data-index="1">
+        <div class="loading-indicator">LOADING...</div>
+        <img src="image000000.gif" alt="Gallery Image 1" class="gallery-image" data-caption="HOLLY" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
         <div class="image-placeholder" style="display: none;">
           <div class="image-number">01</div>
-          <div>[ HOLLY ]<br>Replace "gallery-1.jpg"</div>
+          <div>[ HOLLY ]<br>FILE NOT FOUND</div>
         </div>
         <div class="gallery-caption">HOLLY</div>
       </div>
 
       <!-- GALLERY ITEM 2 -->
-      <div class="gallery-item">
-        <img src="Screenshot_20251217_195933_Gallery.jpg" alt="Gallery Image 2" class="gallery-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="gallery-item" data-index="2">
+        <div class="loading-indicator">LOADING...</div>
+        <img src="Screenshot_20251217_195933_Gallery.jpg" alt="Gallery Image 2" class="gallery-image" data-caption="BOOTS" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
         <div class="image-placeholder" style="display: none;">
           <div class="image-number">02</div>
-          <div>[ ADD IMAGE 2 HERE ]<br>Replace "gallery-2.jpg"</div>
+          <div>[ BOOTS ]<br>FILE NOT FOUND</div>
         </div>
         <div class="gallery-caption">BOOTS</div>
       </div>
 
       <!-- GALLERY ITEM 3 -->
-      <div class="gallery-item">
-        <img src="Screenshot_20251217_195950_Gallery.jpg" alt="Gallery Image 3" class="gallery-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="gallery-item" data-index="3">
+        <div class="loading-indicator">LOADING...</div>
+        <img src="Screenshot_20251217_195950_Gallery.jpg" alt="Gallery Image 3" class="gallery-image" data-caption="2 FRESH" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
         <div class="image-placeholder" style="display: none;">
           <div class="image-number">03</div>
-          <div>[ ADD IMAGE 3 HERE ]<br>Replace "gallery-3.jpg"</div>
+          <div>[ 2 FRESH ]<br>FILE NOT FOUND</div>
         </div>
         <div class="gallery-caption">2 Fresh</div>
       </div>
 
       <!-- GALLERY ITEM 4 -->
-      <div class="gallery-item">
-        <img src="Screenshot_20251217_201722_Gallery.jpg" alt="Gallery Image 4" class="gallery-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="gallery-item" data-index="4">
+        <div class="loading-indicator">LOADING...</div>
+        <img src="Screenshot_20251217_201722_Gallery.jpg" alt="Gallery Image 4" class="gallery-image" data-caption="IVY" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
         <div class="image-placeholder" style="display: none;">
           <div class="image-number">04</div>
-          <div>[ ADD IMAGE 4 HERE ]<br>Replace "gallery-4.jpg"</div>
+          <div>[ IVY ]<br>FILE NOT FOUND</div>
         </div>
         <div class="gallery-caption">IVY</div>
       </div>
 
       <!-- GALLERY ITEM 5 -->
-      <div class="gallery-item">
-        <img src="Screenshot_20251217_203552_Gallery.jpg" alt="Gallery Image 5" class="gallery-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="gallery-item" data-index="5">
+        <div class="loading-indicator">LOADING...</div>
+        <img src="Screenshot_20251217_203552_Gallery.jpg" alt="Gallery Image 5" class="gallery-image" data-caption="KAYA DA DON" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
         <div class="image-placeholder" style="display: none;">
           <div class="image-number">05</div>
-          <div>[ ADD IMAGE 5 HERE ]<br>Replace "gallery-5.jpg"</div>
+          <div>[ KAYA DA DON ]<br>FILE NOT FOUND</div>
         </div>
         <div class="gallery-caption">KAYA DA DON</div>
       </div>
 
-       <!-- GALLERY ITEM 5 -->
-      <div class="gallery-item">
-        <img src="image000000(1).gif" alt="Gallery Image 5" class="gallery-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <!-- GALLERY ITEM 6 -->
+      <div class="gallery-item" data-index="6">
+        <div class="loading-indicator">LOADING...</div>
+        <img src="image000000(1).gif" alt="Gallery Image 6" class="gallery-image" data-caption="HOLLY FETCHING" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
         <div class="image-placeholder" style="display: none;">
-          <div class="image-number">05</div>
-          <div>[ ADD IMAGE 5 HERE ]<br>Replace "gallery-5.jpg"</div>
+          <div class="image-number">06</div>
+          <div>[ HOLLY FETCHING ]<br>FILE NOT FOUND</div>
         </div>
         <div class="gallery-caption">HOLLY FETCHING</div>
       </div>
@@ -466,7 +632,79 @@
     <a href="contact.html" class="nav-link">Contact</a>
   </nav>
 
+  <!-- Lightbox Modal -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-content">
+      <div class="lightbox-close" id="lightboxClose">×</div>
+      <img src="" alt="" class="lightbox-image" id="lightboxImage">
+      <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+  </div>
+
   <script>
+    // Image loading counter
+    let loadedImages = 0;
+    const totalImages = document.querySelectorAll('.gallery-image').length;
+    const loadedCountEl = document.getElementById('loadedCount');
+
+    document.querySelectorAll('.gallery-image').forEach(img => {
+      const item = img.closest('.gallery-item');
+      item.classList.add('loading');
+      
+      img.addEventListener('load', () => {
+        loadedImages++;
+        loadedCountEl.textContent = loadedImages;
+        item.classList.remove('loading');
+      });
+
+      img.addEventListener('error', () => {
+        loadedImages++;
+        loadedCountEl.textContent = loadedImages;
+        item.classList.remove('loading');
+      });
+
+      // If image is already cached
+      if (img.complete) {
+        loadedImages++;
+        loadedCountEl.textContent = loadedImages;
+        item.classList.remove('loading');
+      }
+    });
+
+    // Lightbox functionality
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightboxImage');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+    const lightboxClose = document.getElementById('lightboxClose');
+
+    document.querySelectorAll('.gallery-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const img = item.querySelector('.gallery-image');
+        if (img.style.display !== 'none') {
+          lightboxImage.src = img.src;
+          lightboxCaption.textContent = img.dataset.caption;
+          lightbox.classList.add('active');
+        }
+      });
+    });
+
+    lightboxClose.addEventListener('click', (e) => {
+      e.stopPropagation();
+      lightbox.classList.remove('active');
+    });
+
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) {
+        lightbox.classList.remove('active');
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        lightbox.classList.remove('active');
+      }
+    });
+
     // Matrix rain canvas
     const canvas = document.getElementById('matrix-canvas');
     const ctx = canvas.getContext('2d');
