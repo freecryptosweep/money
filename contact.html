@@ -1,122 +1,393 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact - For the Autonomous Only</title>
-    <style>
-        body {
-            background-color: black;
-            color: limegreen;
-            font-family: 'Courier New', Courier, monospace;
-            text-align: center;
-            padding: 50px;
-            line-height: 1.6;
-        }
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        h2 {
-            font-size: 1.8em;
-            margin-top: 40px;
-        }
-        p {
-            font-size: 1.2em;
-            max-width: 800px;
-            margin: 20px auto;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        .quote {
-            font-style: italic;
-            margin: 40px auto;
-            border: 1px dashed limegreen;
-            padding: 20px;
-        }
-        .nav {
-            margin-top: 60px;
-            font-size: 1.1em;
-        }
-        .nav a {
-            color: limegreen;
-            text-decoration: none;
-            margin: 0 15px;
-        }
-        .nav a:hover {
-            text-decoration: underline;
-        }
-        form {
-            margin: 40px auto;
-            max-width: 600px;
-            text-align: left;
-        }
-        label {
-            display: block;
-            margin-top: 20px;
-        }
-        input, textarea {
-            width: 100%;
-            background: black;
-            color: limegreen;
-            border: 1px solid limegreen;
-            padding: 10px;
-            font-family: 'Courier New', Courier, monospace;
-        }
-        button {
-            margin-top: 30px;
-            padding: 10px 20px;
-            background: black;
-            color: limegreen;
-            border: 1px solid limegreen;
-            font-family: 'Courier New', Courier, monospace;
-            cursor: pointer;
-        }
-        button:hover {
-            background: limegreen;
-            color: black;
-        }
-    </style>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - For the Autonomous Only</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      background: #000000;
+      color: #00ff00;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Intense matrix rain background */
+    #matrix-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      opacity: 0.6;
+    }
+
+    /* Scanline effect */
+    .scanline {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        to bottom,
+        transparent 50%,
+        rgba(0, 255, 0, 0.03) 51%
+      );
+      background-size: 100% 4px;
+      z-index: 2;
+      pointer-events: none;
+      animation: scan 8s linear infinite;
+    }
+
+    @keyframes scan {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(4px); }
+    }
+
+    /* Screen flicker */
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      41.99% { opacity: 1; }
+      42% { opacity: 0.8; }
+      43% { opacity: 1; }
+      45.99% { opacity: 1; }
+      46% { opacity: 0.9; }
+      46.5% { opacity: 1; }
+    }
+
+    .container {
+      flex: 1;
+      max-width: 1000px;
+      width: 100%;
+      margin: 0 auto;
+      background: rgba(0, 0, 0, 0.85);
+      border: 2px solid #00ff00;
+      padding: 40px 30px;
+      position: relative;
+      z-index: 10;
+      box-shadow: 
+        0 0 20px rgba(0, 255, 0, 0.3),
+        inset 0 0 100px rgba(0, 255, 0, 0.03);
+      animation: flicker 5s infinite;
+    }
+
+    /* Terminal header */
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #00ff00;
+    }
+
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #00ff00;
+      box-shadow: 0 0 10px #00ff00;
+      animation: pulse-glow 2s infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% {
+        box-shadow: 0 0 10px #00ff00;
+      }
+      50% {
+        box-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00;
+      }
+    }
+
+    .terminal-title {
+      font-size: 0.9rem;
+      color: #00ff00;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+      color: #00ff00;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      text-shadow: 
+        0 0 10px #00ff00,
+        0 0 20px #00ff00;
+    }
+
+    .quote {
+      font-style: italic;
+      margin: 40px auto;
+      padding: 30px;
+      border: 2px dashed #00ff00;
+      max-width: 900px;
+      background: rgba(0, 255, 0, 0.05);
+      text-shadow: 0 0 5px #00ff00;
+      box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin: 40px 0 20px;
+      color: #00ff00;
+      letter-spacing: 2px;
+    }
+
+    form {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      margin-top: 25px;
+      color: #00ff00;
+      text-shadow: 0 0 5px #00ff00;
+    }
+
+    input, textarea {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      color: #00ff00;
+      border: 2px solid #00ff00;
+      padding: 12px;
+      font-family: 'Courier New', Courier, monospace;
+      margin-top: 8px;
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+    }
+
+    button {
+      margin-top: 40px;
+      padding: 15px 30px;
+      background: rgba(0, 0, 0, 0.8);
+      color: #00ff00;
+      border: 2px solid #00ff00;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+      transition: all 0.3s;
+    }
+
+    button:hover {
+      background: rgba(0, 255, 0, 0.2);
+      box-shadow: 0 0 30px rgba(0, 255, 0, 0.6);
+    }
+
+    p {
+      margin: 30px auto;
+      max-width: 800px;
+      text-shadow: 0 0 5px #00ff00;
+    }
+
+    /* Navigation menu */
+    .nav-menu {
+      width: 100%;
+      max-width: 1000px;
+      margin: 30px auto 0;
+      background: rgba(0, 0, 0, 0.85);
+      border: 2px solid #00ff00;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      position: relative;
+      z-index: 10;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    }
+
+    .nav-link {
+      color: #00ff00;
+      text-decoration: none;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 10px 20px;
+      border: 1px solid #00ff00;
+      background: rgba(0, 255, 0, 0.05);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      text-shadow: 0 0 5px #00ff00;
+    }
+
+    .nav-link::before {
+      content: '>';
+      position: absolute;
+      left: 10px;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+      background: rgba(0, 255, 0, 0.2);
+      box-shadow: 
+        0 0 10px #00ff00,
+        inset 0 0 10px rgba(0, 255, 0, 0.2);
+      padding-left: 30px;
+      text-shadow: 0 0 10px #00ff00;
+    }
+
+    .nav-link:hover::before {
+      opacity: 1;
+      left: 10px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 30px 20px;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+      .nav-menu {
+        flex-direction: column;
+        gap: 15px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+      #matrix-canvas,
+      .scanline {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Prove Your Autonomy</h1>
-        
-        
-        <div class="quote">
-            "The system does not and cannot exist to satisfy human needs.<br>
-            Instead, it is human behavior that has to be modified to fit the needs of the system."
-        </div>
-        
-        <h2></h2>
-        
-        
-        <!-- Simple client-side note: Replace with Formspree/Google Forms/Netlify for real submission -->
-        <form action="https://formspree.io/f/mnjaazno" method="POST"><!-- Replace with your actual endpoint -->
-            <label for="insight">Your Insight / Quote / Message:</label>
-            <textarea id="insight" name="insight" rows="8" required></textarea>
-            
-            <label for="contact">Contact (Signal preferred / ProtonMail / Carrier pigeon coordinates):</label>
-            <input type="text" id="contact" name="contact">
-            
-            <label for="name">Designation (optional):</label>
-            <input type="text" id="name" name="name">
-            
-            <button type="submit">Transmit</button>
-        </form>
-        
-        <p>No data is stored here. Use encrypted channels for true discourse.</p>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="scanline"></div>
+
+  <div class="container">
+    <div class="terminal-header">
+      <div class="terminal-dot"></div>
+      <div class="terminal-dot"></div>
+      <div class="terminal-dot"></div>
+      <span class="terminal-title">Autonomous Transmission Terminal</span>
     </div>
-    
-    <div class="nav">
-        <a href="index.html">Home</a>
-        <a href="gallery.html">Gallery</a>
-        <a href="literature.html">Literature</a>
-        <a href="contact.html">Contact</a>
+
+    <h1>Prove Your Autonomy</h1>
+
+    <div class="quote">
+      "The system does not and cannot exist to satisfy human needs.<br>
+      Instead, it is human behavior that has to be modified to fit the needs of the system."
     </div>
+
+    <h2>Transmit Securely</h2>
+
+    <form action="https://formspree.io/f/mnjaazno" method="POST">
+      <div style="display:none;">
+        <label for="gotcha">Leave this blank if human:</label>
+        <input type="text" name="_gotcha" id="gotcha" tabindex="-1" autocomplete="off">
+      </div>
+
+      <label for="insight">Your Insight / Quote / Message:</label>
+      <textarea id="insight" name="insight" rows="8" required></textarea>
+
+      <label for="contact">Contact (Signal preferred / ProtonMail / Carrier pigeon coordinates):</label>
+      <input type="text" id="contact" name="contact">
+
+      <label for="name">Designation (optional):</label>
+      <input type="text" id="name" name="name">
+
+      <button type="submit">Transmit</button>
+    </form>
+
+    <p>No data is stored here. Use encrypted channels for true discourse.</p>
+  </div>
+
+  <nav class="nav-menu">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="gallery.html" class="nav-link">Gallery</a>
+    <a href="literature.html" class="nav-link">Literature</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+  </nav>
+
+  <script>
+    // Matrix rain canvas (same as index.html)
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const phrase = "YOU'LL LEARN TO LOVE ME";
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = [];
+    const messages = [];
+
+    for (let i = 0; i < columns; i++) {
+      drops[i] = Math.floor(Math.random() * canvas.height / fontSize);
+      messages[i] = '';
+    }
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#00ff00';
+      ctx.font = fontSize + 'px monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+        let text;
+        if (Math.random() > 0.98) {
+          messages[i] = phrase;
+        }
+        
+        if (messages[i]) {
+          text = messages[i].charAt(drops[i] % messages[i].length);
+        } else {
+          text = String.fromCharCode(0x30A0 + Math.random() * 96);
+        }
+
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+          messages[i] = '';
+        }
+
+        drops[i]++;
+      }
+    }
+
+    setInterval(drawMatrix, 50);
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
 </body>
 </html>
