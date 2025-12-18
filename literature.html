@@ -88,6 +88,17 @@
       animation: flicker 5s infinite;
     }
 
+    /* New: Small green disclaimer at the very top */
+    .disclaimer {
+      width: 100%;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 0.85rem;
+      color: #00ff00;
+      text-shadow: 0 0 5px #00ff00;
+      opacity: 0.8;
+    }
+
     /* Terminal header */
     .terminal-header {
       display: flex;
@@ -279,6 +290,11 @@
         padding: 40px 20px;
       }
 
+      .disclaimer {
+        font-size: 0.8rem;
+        margin-bottom: 20px;
+      }
+
       .image-placeholder {
         height: 300px;
         font-size: 0.9rem;
@@ -326,6 +342,9 @@
   <div class="scanline"></div>
   
   <div class="container">
+    <!-- Small green disclaimer at the very top of the container -->
+    <div class="disclaimer">(this page contains my weaponized insight)</div>
+
     <div class="terminal-header">
       <div class="terminal-dot"></div>
       <div class="terminal-dot"></div>
@@ -385,7 +404,7 @@ forever documenting our own enslavement.
     <!-- Second section: Another Image + Poem (duplicate structure) -->
     <div class="image-container">
       <!-- Replace with your second image filename -->
-      <img src="image000001.jpg" alt="Second Image Description" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <img src="image000001.jpg" alt="Church" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
       <div class="image-placeholder" style="display: none;">
         [ ADD YOUR SECOND IMAGE HERE ]<br>
         Replace "your-second-image.jpg" in the src attribute
@@ -396,8 +415,6 @@ forever documenting our own enslavement.
       <div class="poem-title">The Silent Pulpit</div>
       
       <div class="poem">
-<!-- ADD YOUR SECOND POEM TEXT BELOW -->
-
 In the vaulted hush of a forsaken nave,
 the crucifix hangs heavy, arms outstretched
 over rows of pews where no knee bends,
@@ -427,8 +444,6 @@ by killing the body that bore it.
 In the empty church, the screen flickers on,
 a solitary light in the gathering dark,
 preaching to ghosts who believe themselves alive.
-
-<!-- ADD YOUR SECOND POEM TEXT ABOVE -->
       </div>
     </div>
 
