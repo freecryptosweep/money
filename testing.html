@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SYSTEM ACCESS CHALLENGE</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      background: #000000;
+      color: #00ff00;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    #matrix-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      opacity: 0.4;
+    }
+
+    .scanline {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, transparent 50%, rgba(0, 255, 0, 0.03) 51%);
+      background-size: 100% 4px;
+      z-index: 2;
+      pointer-events: none;
+      animation: scan 8s linear infinite;
+    }
+
+    @keyframes scan {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(4px); }
+    }
+
+    .container {
+      flex: 1;
+      max-width: 1000px;
+      width: 100%;
+      margin: 0 auto;
+      background: rgba(0, 0, 0, 0.85);
+      border: 2px solid #00ff00;
+      padding: 40px 30px;
+      position: relative;
+      z-index: 10;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #00ff00;
+    }
+
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #00ff00;
+      box-shadow: 0 0 10px #00ff00;
+      animation: pulse-glow 2s infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 10px #00ff00; }
+      50% { box-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00; }
+    }
+
+    .terminal-title {
+      font-size: 0.9rem;
+      color: #00ff00;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      color: #ff0000;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+      animation: glitch 3s infinite;
+    }
+
+    @keyframes glitch {
+      0%, 100% { text-shadow: 0 0 10px #ff0000; transform: translate(0); }
+      20% { text-shadow: 3px 0 10px #ff0000, -3px 0 20px #00ffff; transform: translate(-2px, 2px); }
+      40% { text-shadow: -3px 0 10px #ff0000, 3px 0 20px #ff00ff; transform: translate(2px, -2px); }
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+      color: #00ff00;
+      letter-spacing: 2px;
+    }
+
+    .puzzle-section {
+      background: rgba(0, 0, 0, 0.7);
+      border: 2px solid #00ff00;
+      padding: 25px;
+      margin: 30px 0;
+      position: relative;
+    }
+
+    .puzzle-section.locked {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .puzzle-title {
+      font-size: 1.4rem;
+      color: #ff0000;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .status-indicator {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #ff0000;
+      box-shadow: 0 0 10px #ff0000;
+    }
+
+    .status-indicator.complete {
+      background: #00ff00;
+      box-shadow: 0 0 10px #00ff00;
+      animation: pulse-glow 2s infinite;
+    }
+
+    .puzzle-description {
+      color: #00ff00;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .code-block {
+      background: rgba(0, 0, 0, 0.9);
+      border: 1px solid #00ff00;
+      padding: 15px;
+      margin: 15px 0;
+      font-family: 'Courier New', monospace;
+      color: #00ff00;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    input[type="text"], input[type="password"] {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.9);
+      border: 2px solid #00ff00;
+      color: #00ff00;
+      padding: 12px;
+      font-family: 'Courier New', monospace;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    input:focus {
+      box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+    }
+
+    button {
+      background: rgba(0, 255, 0, 0.1);
+      border: 2px solid #00ff00;
+      color: #00ff00;
+      padding: 12px 30px;
+      font-family: 'Courier New', monospace;
+      font-size: 1rem;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: rgba(0, 255, 0, 0.2);
+      box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .feedback {
+      margin-top: 15px;
+      padding: 10px;
+      border-left: 3px solid #ff0000;
+      background: rgba(255, 0, 0, 0.1);
+      display: none;
+    }
+
+    .feedback.success {
+      border-left-color: #00ff00;
+      background: rgba(0, 255, 0, 0.1);
+      color: #00ff00;
+    }
+
+    .feedback.error {
+      color: #ff0000;
+    }
+
+    .feedback.show {
+      display: block;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .hex-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 5px;
+      margin: 20px 0;
+    }
+
+    .hex-cell {
+      aspect-ratio: 1;
+      background: rgba(0, 0, 0, 0.9);
+      border: 2px solid #00ff00;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+    }
+
+    .hex-cell:hover {
+      background: rgba(0, 255, 0, 0.2);
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+
+    .hex-cell.selected {
+      background: rgba(0, 255, 0, 0.3);
+      border-color: #ff0000;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+    }
+
+    .binary-sequence {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+
+    .binary-digit {
+      width: 40px;
+      height: 40px;
+      background: rgba(0, 0, 0, 0.9);
+      border: 2px solid #00ff00;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: all 0.2s ease;
+    }
+
+    .binary-digit:hover {
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+
+    .binary-digit.active {
+      background: #00ff00;
+      color: #000;
+      box-shadow: 0 0 15px #00ff00;
+    }
+
+    .final-access {
+      background: rgba(255, 0, 0, 0.1);
+      border: 3px solid #ff0000;
+      padding: 30px;
+      margin: 40px 0;
+      text-align: center;
+      display: none;
+    }
+
+    .final-access.show {
+      display: block;
+      animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .final-message {
+      font-size: 1.8rem;
+      color: #ff0000;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+      margin-bottom: 20px;
+    }
+
+    .secret-code {
+      font-size: 2.5rem;
+      color: #00ff00;
+      font-weight: bold;
+      letter-spacing: 5px;
+      text-shadow: 0 0 20px #00ff00;
+      margin: 20px 0;
+    }
+
+    .nav-link {
+      display: inline-block;
+      color: #00ff00;
+      text-decoration: none;
+      border: 2px solid #00ff00;
+      padding: 10px 20px;
+      margin-top: 20px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+      background: rgba(0, 255, 0, 0.2);
+      box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+    }
+
+    .hint-text {
+      color: #888;
+      font-size: 0.9rem;
+      font-style: italic;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px 15px;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .hex-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .binary-digit {
+        width: 35px;
+        height: 35px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix-canvas"></canvas>
+  <div class="scanline"></div>
+  
+  <div class="container">
+    <div class="terminal-header">
+      <div class="terminal-dot"></div>
+      <div class="terminal-dot"></div>
+      <div class="terminal-dot"></div>
+      <span class="terminal-title">Security Challenge Active</span>
+    </div>
+
+    <h1>ACCESS CHALLENGE</h1>
+    <p class="subtitle">Complete all security protocols to gain access</p>
+
+    <!-- Puzzle 1: Caesar Cipher -->
+    <div class="puzzle-section" id="puzzle1">
+      <div class="puzzle-title">
+        <div class="status-indicator" id="status1"></div>
+        LEVEL 1: DECRYPT MESSAGE
+      </div>
+      <p class="puzzle-description">
+        Intercepted transmission detected. Decrypt the following message using ROT13 cipher:
+      </p>
+      <div class="code-block">URYYB_JBEYQ_GUR_NAFJRE_VF_PUNBF</div>
+      <div class="input-group">
+        <input type="text" id="cipher-input" placeholder="Enter decrypted message..." autocomplete="off">
+        <button onclick="checkCipher()">SUBMIT</button>
+      </div>
+      <div class="feedback" id="cipher-feedback"></div>
+      <p class="hint-text">Hint: Each letter is shifted by 13 positions in the alphabet</p>
+    </div>
+
+    <!-- Puzzle 2: Binary to ASCII -->
+    <div class="puzzle-section locked" id="puzzle2">
+      <div class="puzzle-title">
+        <div class="status-indicator" id="status2"></div>
+        LEVEL 2: BINARY DECODE
+      </div>
+      <p class="puzzle-description">
+        Convert the binary sequence below to ASCII text:
+      </p>
+      <div class="code-block">01000111 01001100 01001001 01010100 01000011 01001000</div>
+      <div class="input-group">
+        <input type="text" id="binary-input" placeholder="Enter decoded text..." autocomplete="off">
+        <button onclick="checkBinary()">SUBMIT</button>
+      </div>
+      <div class="feedback" id="binary-feedback"></div>
+      <p class="hint-text">Hint: Each 8-digit sequence represents one ASCII character</p>
+    </div>
+
+    <!-- Puzzle 3: Hex Pattern -->
+    <div class="puzzle-section locked" id="puzzle3">
+      <div class="puzzle-title">
+        <div class="status-indicator" id="status3"></div>
+        LEVEL 3: PATTERN RECOGNITION
+      </div>
+      <p class="puzzle-description">
+        Click the hex values that spell "DAEMON" in sequence:
+      </p>
+      <div class="hex-grid" id="hex-grid"></div>
+      <div class="feedback" id="hex-feedback"></div>
+      <p class="hint-text">Hint: Look for ASCII hex values: D=44, A=41, E=45, M=4D, O=4F, N=4E</p>
+    </div>
+
+    <!-- Puzzle 4: Math Sequence -->
+    <div class="puzzle-section locked" id="puzzle4">
+      <div class="puzzle-title">
+        <div class="status-indicator" id="status4"></div>
+        LEVEL 4: SEQUENCE ANALYSIS
+      </div>
+      <p class="puzzle-description">
+        Find the next number in the Fibonacci-based sequence:
+      </p>
+      <div class="code-block">1, 1, 2, 3, 5, 8, 13, 21, 34, 55, ?</div>
+      <div class="input-group">
+        <input type="text" id="sequence-input" placeholder="Enter next number..." autocomplete="off">
+        <button onclick="checkSequence()">SUBMIT</button>
+      </div>
+      <div class="feedback" id="sequence-feedback"></div>
+      <p class="hint-text">Hint: Each number is the sum of the previous two</p>
+    </div>
+
+    <!-- Final Access -->
+    <div class="final-access" id="final-access">
+      <p class="final-message">⚠ SECURITY PROTOCOLS BYPASSED ⚠</p>
+      <p style="color: #00ff00; margin: 20px 0;">
+        Congratulations, you've successfully infiltrated Michael's network.
+      </p>
+      <p class="secret-code">ACCESS CODE: M1CH43L-1337</p>
+      <p style="color: #00ff00; margin: 20px 0;">
+        Your hacking skills are adequate. Welcome to the system.
+      </p>
+      <a href="index.html" class="nav-link">← RETURN TO MAINFRAME</a>
+    </div>
+  </div>
+
+  <script>
+    // Matrix rain background
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = [];
+
+    for (let i = 0; i < columns; i++) {
+      drops[i] = Math.floor(Math.random() * canvas.height / fontSize);
+    }
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#00ff00';
+      ctx.font = fontSize + 'px monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = String.fromCharCode(0x30A0 + Math.random() * 96);
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(drawMatrix, 50);
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    // Puzzle tracking
+    let completedPuzzles = 0;
+
+    // Puzzle 1: Caesar Cipher (ROT13)
+    function checkCipher() {
+      const input = document.getElementById('cipher-input').value.toUpperCase().replace(/[^A-Z_]/g, '');
+      const feedback = document.getElementById('cipher-feedback');
+      
+      if (input === 'HELLO_WORLD_THE_ANSWER_IS_CHAOS') {
+        feedback.className = 'feedback success show';
+        feedback.textContent = '✓ ACCESS GRANTED - Level 1 Complete';
+        document.getElementById('status1').classList.add('complete');
+        completedPuzzles++;
+        unlockNextPuzzle(2);
+      } else {
+        feedback.className = 'feedback error show';
+        feedback.textContent = '✗ ACCESS DENIED - Incorrect decryption';
+      }
+    }
+
+    // Puzzle 2: Binary to ASCII
+    function checkBinary() {
+      const input = document.getElementById('binary-input').value.toUpperCase();
+      const feedback = document.getElementById('binary-feedback');
+      
+      if (input === 'GLITCH') {
+        feedback.className = 'feedback success show';
+        feedback.textContent = '✓ ACCESS GRANTED - Level 2 Complete';
+        document.getElementById('status2').classList.add('complete');
+        completedPuzzles++;
+        unlockNextPuzzle(3);
+      } else {
+        feedback.className = 'feedback error show';
+        feedback.textContent = '✗ ACCESS DENIED - Binary conversion failed';
+      }
+    }
+
+    // Puzzle 3: Hex Pattern
+    const hexValues = [
+      '2F', '44', '7A', '41', '3B', '45', '91', '4D',
+      '52', '4F', '1C', '4E', '88', '22', '6D', '33',
+      'A1', '55', 'B9', '77', '4A', 'C3', '99', '2E',
+      '5F', '66', 'D2', '8C', '19', '7B', 'E4', 'F1'
+    ];
+    const correctSequence = ['44', '41', '45', '4D', '4F', '4E']; // DAEMON
+    let selectedCells = [];
+
+    function initHexGrid() {
+      const grid = document.getElementById('hex-grid');
+      hexValues.forEach((val, idx) => {
+        const cell = document.createElement('div');
+        cell.className = 'hex-cell';
+        cell.textContent = val;
+        cell.onclick = () => selectHexCell(val, cell);
+        grid.appendChild(cell);
+      });
+    }
+
+    function selectHexCell(val, cell) {
+      if (selectedCells.length >= 6) {
+        resetHexSelection();
+      }
+      
+      selectedCells.push(val);
+      cell.classList.add('selected');
+      
+      if (selectedCells.length === 6) {
+        checkHexPattern();
+      }
+    }
+
+    function resetHexSelection() {
+      selectedCells = [];
+      document.querySelectorAll('.hex-cell').forEach(cell => {
+        cell.classList.remove('selected');
+      });
+    }
+
+    function checkHexPattern() {
+      const feedback = document.getElementById('hex-feedback');
+      
+      if (JSON.stringify(selectedCells) === JSON.stringify(correctSequence)) {
+        feedback.className = 'feedback success show';
+        feedback.textContent = '✓ ACCESS GRANTED - Level 3 Complete';
+        document.getElementById('status3').classList.add('complete');
+        completedPuzzles++;
+        unlockNextPuzzle(4);
+      } else {
+        feedback.className = 'feedback error show';
+        feedback.textContent = '✗ ACCESS DENIED - Pattern mismatch. Try again.';
+        setTimeout(resetHexSelection, 1500);
+      }
+    }
+
+    // Puzzle 4: Fibonacci Sequence
+    function checkSequence() {
+      const input = document.getElementById('sequence-input').value;
+      const feedback = document.getElementById('sequence-feedback');
+      
+      if (input === '89') {
+        feedback.className = 'feedback success show';
+        feedback.textContent = '✓ ACCESS GRANTED - Level 4 Complete';
+        document.getElementById('status4').classList.add('complete');
+        completedPuzzles++;
+        
+        setTimeout(() => {
+          document.getElementById('final-access').classList.add('show');
+          document.getElementById('final-access').scrollIntoView({ behavior: 'smooth' });
+        }, 1000);
+      } else {
+        feedback.className = 'feedback error show';
+        feedback.textContent = '✗ ACCESS DENIED - Sequence analysis failed';
+      }
+    }
+
+    // Unlock next puzzle
+    function unlockNextPuzzle(puzzleNum) {
+      setTimeout(() => {
+        const nextPuzzle = document.getElementById('puzzle' + puzzleNum);
+        if (nextPuzzle) {
+          nextPuzzle.classList.remove('locked');
+          nextPuzzle.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 800);
+    }
+
+    // Initialize
+    initHexGrid();
+  </script>
+</body>
+</html>
