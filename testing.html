@@ -702,7 +702,7 @@
         <span>LEVEL 4: PORT SCANNING</span>
       </div>
       <p class="puzzle-description">
-        Find and click the 3 open ports. Common service ports: HTTP=80, HTTPS=443, SSH=22, FTP=21, SMTP=25
+        Find and click the 3 open ports.
       </p>
       <div class="port-grid" id="port-grid"></div>
       <div class="feedback" id="port-feedback"></div>
@@ -721,14 +721,13 @@
       </p>
       <div class="code-block">Encrypted bytes: [62, 60, 63, 59, 62]
 
-Calculate: 62⊕75, 60⊕75, 63⊕75, 59⊕75, 62⊕75
-Then convert results to ASCII characters</div>
+      Convert results to ASCII characters</div>
       <div class="input-group">
         <input type="text" id="xor-input" placeholder="Enter decrypted word..." autocomplete="off">
         <button type="button" id="xor-submit">SUBMIT</button>
       </div>
       <div class="feedback" id="xor-feedback"></div>
-      <p class="hint-text">Hint: XOR is reversible. Each number XOR 75 gives you an ASCII code. Example: 62⊕75=13 (ASCII 'M')</p>
+      <p class="hint-text"></p>
     </div>
 
     <!-- Puzzle 6: Wire Defusal -->
