@@ -171,7 +171,8 @@
       font-family: 'Courier New', monospace;
       color: #00ff00;
       overflow-x: auto;
-      white-space: pre;
+      white-space: pre-wrap;
+      word-break: break-all;
     }
 
     .input-group {
@@ -281,34 +282,90 @@
       box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
     }
 
-    .binary-sequence {
-      display: flex;
+    .port-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
       gap: 10px;
-      flex-wrap: wrap;
       margin: 20px 0;
     }
 
-    .binary-digit {
-      width: 40px;
-      height: 40px;
+    .port-button {
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.9);
+      border: 2px solid #00ff00;
+      color: #00ff00;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+      font-family: 'Courier New', monospace;
+    }
+
+    .port-button:hover {
+      background: rgba(0, 255, 0, 0.2);
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+
+    .port-button.correct {
+      background: rgba(0, 255, 0, 0.3);
+      border-color: #00ff00;
+    }
+
+    .memory-game {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .memory-card {
+      aspect-ratio: 1;
       background: rgba(0, 0, 0, 0.9);
       border: 2px solid #00ff00;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 1.2rem;
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .memory-card.flipped {
+      background: rgba(0, 255, 0, 0.2);
+      transform: rotateY(180deg);
+    }
+
+    .memory-card.matched {
+      background: rgba(0, 255, 0, 0.3);
+      border-color: #00ff00;
+      pointer-events: none;
+    }
+
+    .cipher-wheel {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .wheel-letter {
+      width: 50px;
+      height: 50px;
+      background: rgba(0, 0, 0, 0.9);
+      border: 2px solid #00ff00;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
       transition: all 0.2s ease;
     }
 
-    .binary-digit:hover {
+    .wheel-letter:hover {
+      background: rgba(0, 255, 0, 0.2);
       box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
-    }
-
-    .binary-digit.active {
-      background: #00ff00;
-      color: #000;
-      box-shadow: 0 0 15px #00ff00;
     }
 
     .final-access {
@@ -372,6 +429,56 @@
       margin-top: 10px;
     }
 
+    .wire-puzzle {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .wire {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .wire-color {
+      width: 100px;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.9);
+      border: 2px solid;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .wire-line {
+      flex: 1;
+      height: 4px;
+      background: currentColor;
+      position: relative;
+    }
+
+    .wire-cut {
+      width: 80px;
+      padding: 8px;
+      background: rgba(255, 0, 0, 0.2);
+      border: 2px solid #ff0000;
+      color: #ff0000;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .wire-cut:hover {
+      background: rgba(255, 0, 0, 0.4);
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    }
+
+    .wire-cut.cut {
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
     @media (max-width: 768px) {
       .container {
         padding: 20px 15px;
@@ -385,9 +492,12 @@
         grid-template-columns: repeat(4, 1fr);
       }
 
-      .binary-digit {
-        width: 35px;
-        height: 35px;
+      .port-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .memory-game {
+        grid-template-columns: repeat(3, 1fr);
       }
     }
   </style>
@@ -405,7 +515,7 @@
     </div>
 
     <h1>ACCESS CHALLENGE</h1>
-    <p class="subtitle">Complete all security protocols to gain access</p>
+    <p class="subtitle">Complete all 8 security protocols to gain access</p>
 
     <!-- Puzzle 1: Caesar Cipher -->
     <div class="puzzle-section" id="puzzle1">
@@ -457,22 +567,83 @@
       <p class="hint-text">Hint: Look for ASCII hex values: D=44, A=41, E=45, M=4D, O=4F, N=4E</p>
     </div>
 
-    <!-- Puzzle 4: Math Sequence -->
+    <!-- Puzzle 4: Port Scanner -->
     <div class="puzzle-section locked" id="puzzle4">
       <div class="puzzle-title">
         <div class="status-indicator" id="status4"></div>
-        LEVEL 4: SEQUENCE ANALYSIS
+        LEVEL 4: PORT SCANNING
       </div>
       <p class="puzzle-description">
-        Find the next number in the Fibonacci-based sequence:
+        Find and click the 3 open ports. Common service ports: HTTP=80, HTTPS=443, SSH=22, FTP=21, SMTP=25
       </p>
-      <div class="code-block">1, 1, 2, 3, 5, 8, 13, 21, 34, 55, ?</div>
-      <div class="input-group">
-        <input type="text" id="sequence-input" placeholder="Enter next number..." autocomplete="off">
-        <button onclick="checkSequence()">SUBMIT</button>
+      <div class="port-grid" id="port-grid"></div>
+      <div class="feedback" id="port-feedback"></div>
+      <p class="hint-text">Hint: Look for standard web and secure shell ports</p>
+    </div>
+
+    <!-- Puzzle 5: XOR Cipher -->
+    <div class="puzzle-section locked" id="puzzle5">
+      <div class="puzzle-title">
+        <div class="status-indicator" id="status5"></div>
+        LEVEL 5: XOR DECRYPTION
       </div>
-      <div class="feedback" id="sequence-feedback"></div>
-      <p class="hint-text">Hint: Each number is the sum of the previous two</p>
+      <p class="puzzle-description">
+        Decrypt using XOR with key 'K' (ASCII 75). Formula: encrypted_byte XOR 75 = decrypted_byte
+      </p>
+      <div class="code-block">Encrypted: [62, 60, 63, 59, 62]
+ASCII Values: 62^75=?, 60^75=?, 63^75=?, 59^75=?, 62^75=?</div>
+      <div class="input-group">
+        <input type="text" id="xor-input" placeholder="Enter decrypted word..." autocomplete="off">
+        <button onclick="checkXOR()">SUBMIT</button>
+      </div>
+      <div class="feedback" id="xor-feedback"></div>
+      <p class="hint-text">Hint: XOR each number with 75, then convert to ASCII character</p>
+    </div>
+
+    <!-- Puzzle 6: Wire Defusal -->
+    <div class="puzzle-section locked" id="puzzle6">
+      <div class="puzzle-title">
+        <div class="status-indicator" id="status6"></div>
+        LEVEL 6: WIRE DEFUSAL
+      </div>
+      <p class="puzzle-description">
+        Cut the wires in the correct order: Blue → Green → Red → Yellow
+      </p>
+      <div class="wire-puzzle" id="wire-puzzle"></div>
+      <div class="feedback" id="wire-feedback"></div>
+      <p class="hint-text">Hint: Follow the color sequence exactly</p>
+    </div>
+
+    <!-- Puzzle 7: Memory Match -->
+    <div class="puzzle-section locked" id="puzzle7">
+      <div class="puzzle-title">
+        <div class="status-indicator" id="status7"></div>
+        LEVEL 7: MEMORY AUTHENTICATION
+      </div>
+      <p class="puzzle-description">
+        Match all pairs of symbols to authenticate your access:
+      </p>
+      <div class="memory-game" id="memory-game"></div>
+      <div class="feedback" id="memory-feedback"></div>
+      <p class="hint-text">Hint: Find matching pairs by clicking cards</p>
+    </div>
+
+    <!-- Puzzle 8: Complex Cipher -->
+    <div class="puzzle-section locked" id="puzzle8">
+      <div class="puzzle-title">
+        <div class="status-indicator" id="status8"></div>
+        LEVEL 8: FINAL DECRYPTION
+      </div>
+      <p class="puzzle-description">
+        Multi-layer encryption detected. First decode from Base64, then reverse the string:
+      </p>
+      <div class="code-block">VFJPUEVOUg==</div>
+      <div class="input-group">
+        <input type="text" id="final-input" placeholder="Enter final decrypted message..." autocomplete="off">
+        <button onclick="checkFinal()">SUBMIT</button>
+      </div>
+      <div class="feedback" id="final-feedback"></div>
+      <p class="hint-text">Hint: Base64 decode first, then reverse the resulting string</p>
     </div>
 
     <!-- Final Access -->
@@ -481,9 +652,9 @@
       <p style="color: #00ff00; margin: 20px 0;">
         Congratulations, you've successfully infiltrated Michael's network.
       </p>
-      <p class="secret-code">ACCESS CODE: M1CH43L-1337</p>
+      <p class="secret-code">ACCESS CODE: 603-254-7241</p>
       <p style="color: #00ff00; margin: 20px 0;">
-        Your hacking skills are adequate. Welcome to the system.
+        Full system access granted.
       </p>
       <a href="index.html" class="nav-link">← RETURN TO MAINFRAME</a>
     </div>
@@ -576,7 +747,7 @@
 
     function initHexGrid() {
       const grid = document.getElementById('hex-grid');
-      hexValues.forEach((val, idx) => {
+      hexValues.forEach((val) => {
         const cell = document.createElement('div');
         cell.className = 'hex-cell';
         cell.textContent = val;
@@ -621,40 +792,49 @@
       }
     }
 
-    // Puzzle 4: Fibonacci Sequence
-    function checkSequence() {
-      const input = document.getElementById('sequence-input').value;
-      const feedback = document.getElementById('sequence-feedback');
+    // Puzzle 4: Port Scanner
+    const ports = [21, 22, 25, 53, 80, 110, 143, 443, 3306, 3389, 5432, 8080, 8443, 9000, 27017];
+    const correctPorts = [22, 80, 443];
+    let selectedPorts = [];
+
+    function initPortGrid() {
+      const grid = document.getElementById('port-grid');
+      const shuffled = [...ports].sort(() => Math.random() - 0.5);
       
-      if (input === '89') {
-        feedback.className = 'feedback success show';
-        feedback.textContent = '✓ ACCESS GRANTED - Level 4 Complete';
-        document.getElementById('status4').classList.add('complete');
-        completedPuzzles++;
-        
-        setTimeout(() => {
-          document.getElementById('final-access').classList.add('show');
-          document.getElementById('final-access').scrollIntoView({ behavior: 'smooth' });
-        }, 1000);
-      } else {
-        feedback.className = 'feedback error show';
-        feedback.textContent = '✗ ACCESS DENIED - Sequence analysis failed';
+      shuffled.forEach(port => {
+        const button = document.createElement('div');
+        button.className = 'port-button';
+        button.textContent = `PORT ${port}`;
+        button.onclick = () => selectPort(port, button);
+        grid.appendChild(button);
+      });
+    }
+
+    function selectPort(port, button) {
+      if (selectedPorts.includes(port)) {
+        selectedPorts = selectedPorts.filter(p => p !== port);
+        button.classList.remove('correct');
+      } else if (selectedPorts.length < 3) {
+        selectedPorts.push(port);
+        button.classList.add('correct');
+      }
+
+      if (selectedPorts.length === 3) {
+        checkPorts();
       }
     }
 
-    // Unlock next puzzle
-    function unlockNextPuzzle(puzzleNum) {
-      setTimeout(() => {
-        const nextPuzzle = document.getElementById('puzzle' + puzzleNum);
-        if (nextPuzzle) {
-          nextPuzzle.classList.remove('locked');
-          nextPuzzle.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 800);
-    }
-
-    // Initialize
-    initHexGrid();
-  </script>
-</body>
-</html>
+    function checkPorts() {
+      const feedback = document.getElementById('port-feedback');
+      const sorted = [...selectedPorts].sort((a, b) => a - b);
+      
+      if (JSON.stringify(sorted) === JSON.stringify(correctPorts)) {
+        feedback.className = 'feedback success show';
+        feedback.textContent = '✓ ACCESS GRANTED - Level 4 Complete - Ports 22 (SSH), 80 (HTTP), 443 (HTTPS) identified';
+        document.getElementById('status4').classList.add('complete');
+        completedPuzzles++;
+        unlockNextPuzzle(5);
+      } else {
+        feedback.className = 'feedback error show';
+        feedback.textContent = '✗ ACCESS DENIED - Incorrect ports. Reset and try again.';
+        setTimeout(() => {
