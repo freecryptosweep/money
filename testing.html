@@ -23,6 +23,7 @@
       padding: 20px;
       position: relative;
       overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
     }
 
     #matrix-canvas {
@@ -141,6 +142,7 @@
       display: flex;
       align-items: center;
       gap: 15px;
+      flex-wrap: wrap;
     }
 
     .status-indicator {
@@ -149,6 +151,7 @@
       border-radius: 50%;
       background: #ff0000;
       box-shadow: 0 0 10px #ff0000;
+      flex-shrink: 0;
     }
 
     .status-indicator.complete {
@@ -171,24 +174,31 @@
       font-family: 'Courier New', monospace;
       color: #00ff00;
       overflow-x: auto;
-      white-space: pre;
+      white-space: pre-wrap;
+      word-break: break-all;
+      font-size: 0.95rem;
     }
 
     .input-group {
       display: flex;
       gap: 10px;
       margin-top: 15px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
     }
 
     input[type="text"], input[type="password"] {
       flex: 1;
+      min-width: 200px;
       background: rgba(0, 0, 0, 0.9);
       border: 2px solid #00ff00;
       color: #00ff00;
       padding: 12px;
       font-family: 'Courier New', monospace;
-      font-size: 1rem;
+      font-size: 16px;
       outline: none;
+      touch-action: manipulation;
     }
 
     input:focus {
@@ -206,6 +216,10 @@
       text-transform: uppercase;
       letter-spacing: 2px;
       transition: all 0.3s ease;
+      white-space: nowrap;
+      touch-action: manipulation;
+      flex-shrink: 0;
+      min-width: 140px;
     }
 
     button:hover {
@@ -266,8 +280,10 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       transition: all 0.2s ease;
+      user-select: none;
+      touch-action: manipulation;
     }
 
     .hex-cell:hover {
@@ -281,34 +297,144 @@
       box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
     }
 
-    .binary-sequence {
-      display: flex;
+    .port-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
       gap: 10px;
-      flex-wrap: wrap;
       margin: 20px 0;
     }
 
-    .binary-digit {
-      width: 40px;
-      height: 40px;
+    .port-button {
+      padding: 15px 10px;
+      background: rgba(0, 0, 0, 0.9);
+      border: 2px solid #00ff00;
+      color: #00ff00;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      user-select: none;
+      touch-action: manipulation;
+    }
+
+    .port-button:hover {
+      background: rgba(0, 255, 0, 0.2);
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+
+    .port-button.correct {
+      background: rgba(0, 255, 0, 0.3);
+      border-color: #00ff00;
+    }
+
+    .memory-game {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .memory-card {
+      aspect-ratio: 1;
       background: rgba(0, 0, 0, 0.9);
       border: 2px solid #00ff00;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 1.2rem;
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      user-select: none;
+      touch-action: manipulation;
+    }
+
+    .memory-card.flipped {
+      background: rgba(0, 255, 0, 0.2);
+    }
+
+    .memory-card.matched {
+      background: rgba(0, 255, 0, 0.3);
+      border-color: #00ff00;
+      pointer-events: none;
+    }
+
+    .wire-puzzle {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .wire {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .wire-color {
+      width: 100px;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.9);
+      border: 2px solid;
+      text-align: center;
+      font-weight: bold;
+      flex-shrink: 0;
+      font-size: 0.9rem;
+    }
+
+    .wire-line {
+      flex: 1;
+      height: 4px;
+      background: currentColor;
+      position: relative;
+      min-width: 40px;
+    }
+
+    .wire-cut {
+      width: 80px;
+      padding: 8px;
+      background: rgba(255, 0, 0, 0.2);
+      border: 2px solid #ff0000;
+      color: #ff0000;
+      cursor: pointer;
+      text-align: center;
       transition: all 0.2s ease;
+      flex-shrink: 0;
+      font-size: 0.9rem;
+      user-select: none;
+      touch-action: manipulation;
     }
 
-    .binary-digit:hover {
-      box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    .wire-cut:hover {
+      background: rgba(255, 0, 0, 0.4);
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
     }
 
-    .binary-digit.active {
-      background: #00ff00;
-      color: #000;
-      box-shadow: 0 0 15px #00ff00;
+    .wire-cut.cut {
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    .sequence-display {
+      display: flex;
+      gap: 10px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .sequence-item {
+      width: 60px;
+      height: 60px;
+      background: rgba(0, 0, 0, 0.9);
+      border: 2px solid #00ff00;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: #00ff00;
     }
 
     .final-access {
@@ -340,12 +466,13 @@
     }
 
     .secret-code {
-      font-size: 2.5rem;
+      font-size: 2rem;
       color: #00ff00;
       font-weight: bold;
       letter-spacing: 5px;
       text-shadow: 0 0 20px #00ff00;
       margin: 20px 0;
+      word-break: break-all;
     }
 
     .nav-link {
@@ -367,27 +494,137 @@
 
     .hint-text {
       color: #888;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-style: italic;
       margin-top: 10px;
+      line-height: 1.4;
     }
 
+    /* Mobile Optimizations */
     @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+
       .container {
         padding: 20px 15px;
       }
 
       h1 {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
+        letter-spacing: 2px;
+      }
+
+      .subtitle {
+        font-size: 0.95rem;
+      }
+
+      .puzzle-title {
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+      }
+
+      .puzzle-section {
+        padding: 20px 15px;
       }
 
       .hex-grid {
         grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
       }
 
-      .binary-digit {
-        width: 35px;
-        height: 35px;
+      .hex-cell {
+        font-size: 0.75rem;
+      }
+
+      .port-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+
+      .port-button {
+        padding: 12px 5px;
+        font-size: 0.8rem;
+      }
+
+      .memory-game {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+
+      .memory-card {
+        font-size: 1.2rem;
+      }
+
+      .wire-color {
+        width: 70px;
+        font-size: 0.8rem;
+        padding: 8px 5px;
+      }
+
+      .wire-cut {
+        width: 60px;
+        font-size: 0.8rem;
+        padding: 8px 5px;
+      }
+
+      .sequence-item {
+        width: 50px;
+        height: 50px;
+        font-size: 1rem;
+      }
+
+      .final-message {
+        font-size: 1.3rem;
+      }
+
+      .secret-code {
+        font-size: 1.3rem;
+        letter-spacing: 2px;
+      }
+
+      input[type="text"] {
+        min-width: 150px;
+        font-size: 0.9rem;
+        padding: 10px;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+      }
+
+      .code-block {
+        font-size: 0.85rem;
+        padding: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.3rem;
+      }
+
+      .hex-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .port-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .input-group {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        min-width: auto;
+      }
+
+      button {
+        width: 100%;
       }
     }
   </style>
@@ -405,13 +642,13 @@
     </div>
 
     <h1>ACCESS CHALLENGE</h1>
-    <p class="subtitle">Complete all security protocols to gain access</p>
+    <p class="subtitle">Complete all 8 security protocols to gain access</p>
 
     <!-- Puzzle 1: Caesar Cipher -->
     <div class="puzzle-section" id="puzzle1">
       <div class="puzzle-title">
         <div class="status-indicator" id="status1"></div>
-        LEVEL 1: DECRYPT MESSAGE
+        <span>LEVEL 1: DECRYPT MESSAGE</span>
       </div>
       <p class="puzzle-description">
         Intercepted transmission detected. Decrypt the following message using ROT13 cipher:
@@ -419,17 +656,17 @@
       <div class="code-block">URYYB_JBEYQ_GUR_NAFJRE_VF_PUNBF</div>
       <div class="input-group">
         <input type="text" id="cipher-input" placeholder="Enter decrypted message..." autocomplete="off">
-        <button onclick="checkCipher()">SUBMIT</button>
+        <button type="button" id="cipher-submit">SUBMIT</button>
       </div>
       <div class="feedback" id="cipher-feedback"></div>
-      <p class="hint-text"></p>
+      <p class="hint-text">Hint: Each letter is shifted by 13 positions in the alphabet. A→N, B→O, etc.</p>
     </div>
 
     <!-- Puzzle 2: Binary to ASCII -->
     <div class="puzzle-section locked" id="puzzle2">
       <div class="puzzle-title">
         <div class="status-indicator" id="status2"></div>
-        LEVEL 2: BINARY DECODE
+        <span>LEVEL 2: BINARY DECODE</span>
       </div>
       <p class="puzzle-description">
         Convert the binary sequence below to ASCII text:
@@ -437,42 +674,106 @@
       <div class="code-block">01000111 01001100 01001001 01010100 01000011 01001000</div>
       <div class="input-group">
         <input type="text" id="binary-input" placeholder="Enter decoded text..." autocomplete="off">
-        <button onclick="checkBinary()">SUBMIT</button>
+        <button type="button" id="binary-submit">SUBMIT</button>
       </div>
       <div class="feedback" id="binary-feedback"></div>
-      <p class="hint-text">Hint: Each 8-digit sequence represents one ASCII character</p>
+      <p class="hint-text">Hint: Each 8-digit sequence represents one ASCII character. Convert binary to decimal, then to ASCII.</p>
     </div>
 
     <!-- Puzzle 3: Hex Pattern -->
     <div class="puzzle-section locked" id="puzzle3">
       <div class="puzzle-title">
         <div class="status-indicator" id="status3"></div>
-        LEVEL 3: PATTERN RECOGNITION
+        <span>LEVEL 3: PATTERN RECOGNITION</span>
       </div>
       <p class="puzzle-description">
         Click the hex values that spell "DAEMON" in sequence:
       </p>
       <div class="hex-grid" id="hex-grid"></div>
+      <button type="button" id="hex-reset" style="margin-top: 10px;">RESET SELECTION</button>
       <div class="feedback" id="hex-feedback"></div>
-      <p class="hint-text">Hint: Look for ASCII hex values</p>
+      <p class="hint-text">Hint: Look for ASCII hex values: D=44, A=41, E=45, M=4D, O=4F, N=4E</p>
     </div>
 
-    <!-- Puzzle 4: Math Sequence -->
+    <!-- Puzzle 4: Port Scanner -->
     <div class="puzzle-section locked" id="puzzle4">
       <div class="puzzle-title">
         <div class="status-indicator" id="status4"></div>
-        LEVEL 4: SEQUENCE ANALYSIS
+        <span>LEVEL 4: PORT SCANNING</span>
       </div>
       <p class="puzzle-description">
-        Find the next number in the Fibonacci-based sequence:
+        Find and click the 3 open ports. Common service ports: HTTP=80, HTTPS=443, SSH=22, FTP=21, SMTP=25
       </p>
-      <div class="code-block">1, 1, 2, 3, 5, 8, 13, 21, 34, 55, ?</div>
-      <div class="input-group">
-        <input type="text" id="sequence-input" placeholder="Enter next number..." autocomplete="off">
-        <button onclick="checkSequence()">SUBMIT</button>
+      <div class="port-grid" id="port-grid"></div>
+      <div class="feedback" id="port-feedback"></div>
+      <p class="hint-text">Hint: Look for standard web server and secure shell ports that are commonly open.</p>
+    </div>
+
+    <!-- Puzzle 5: XOR Cipher -->
+    <div class="puzzle-section locked" id="puzzle5">
+      <div class="puzzle-title">
+        <div class="status-indicator" id="status5"></div>
+        <span>LEVEL 5: XOR DECRYPTION</span>
       </div>
-      <div class="feedback" id="sequence-feedback"></div>
-      <p class="hint-text"></p>
+      <p class="puzzle-description">
+        Decrypt using XOR with key 'K' (ASCII 75). Apply XOR to each byte:
+      </p>
+      <div class="code-block">Encrypted bytes: [62, 60, 63, 59, 62]
+
+Calculate: 62⊕75, 60⊕75, 63⊕75, 59⊕75, 62⊕75
+Then convert results to ASCII characters</div>
+      <div class="input-group">
+        <input type="text" id="xor-input" placeholder="Enter decrypted word..." autocomplete="off">
+        <button type="button" id="xor-submit">SUBMIT</button>
+      </div>
+      <div class="feedback" id="xor-feedback"></div>
+      <p class="hint-text">Hint: XOR is reversible. Each number XOR 75 gives you an ASCII code. Example: 62⊕75=13 (ASCII 'M')</p>
+    </div>
+
+    <!-- Puzzle 6: Wire Defusal -->
+    <div class="puzzle-section locked" id="puzzle6">
+      <div class="puzzle-title">
+        <div class="status-indicator" id="status6"></div>
+        <span>LEVEL 6: WIRE DEFUSAL</span>
+      </div>
+      <p class="puzzle-description">
+        Cut the wires in the correct order: Blue → Green → Red → Yellow
+      </p>
+      <div class="wire-puzzle" id="wire-puzzle"></div>
+      <div class="feedback" id="wire-feedback"></div>
+      <p class="hint-text">Hint: Follow the color sequence exactly. Wrong order = explosion!</p>
+    </div>
+
+    <!-- Puzzle 7: Memory Match -->
+    <div class="puzzle-section locked" id="puzzle7">
+      <div class="puzzle-title">
+        <div class="status-indicator" id="status7"></div>
+        <span>LEVEL 7: MEMORY AUTHENTICATION</span>
+      </div>
+      <p class="puzzle-description">
+        Match all pairs of symbols to authenticate your access:
+      </p>
+      <div class="memory-game" id="memory-game"></div>
+      <div class="feedback" id="memory-feedback"></div>
+      <p class="hint-text">Hint: Click cards to reveal symbols. Find matching pairs. All 6 pairs must be matched.</p>
+    </div>
+
+    <!-- Puzzle 8: Complex Cipher -->
+    <div class="puzzle-section locked" id="puzzle8">
+      <div class="puzzle-title">
+        <div class="status-indicator" id="status8"></div>
+        <span>LEVEL 8: FINAL DECRYPTION</span>
+      </div>
+      <p class="puzzle-description">
+        Multi-layer encryption detected. First decode from Base64, then reverse the string:
+      </p>
+      <div class="code-block">VFJPUEVOUg==</div>
+      <div class="input-group">
+        <input type="text" id="final-input" placeholder="Enter final decrypted message..." autocomplete="off">
+        <button type="button" id="final-submit">SUBMIT</button>
+      </div>
+      <div class="feedback" id="final-feedback"></div>
+      <p class="hint-text">Hint: Step 1: Decode Base64. Step 2: Reverse the resulting string character by character.</p>
     </div>
 
     <!-- Final Access -->
@@ -481,9 +782,9 @@
       <p style="color: #00ff00; margin: 20px 0;">
         Congratulations, you've successfully infiltrated Michael's network.
       </p>
-      <p class="secret-code">ACCESS CODE: 603-254-7241</p>
+      <p class="secret-code">ACCESS CODE: M1CH43L-1337-H4X0R</p>
       <p style="color: #00ff00; margin: 20px 0;">
-       
+        Your hacking skills are exceptional. Full system access granted.
       </p>
       <a href="index.html" class="nav-link">← RETURN TO MAINFRAME</a>
     </div>
@@ -493,16 +794,27 @@
     // Matrix rain background
     const canvas = document.getElementById('matrix-canvas');
     const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    
+    resizeCanvas();
 
     const fontSize = 14;
-    const columns = canvas.width / fontSize;
-    const drops = [];
+    let columns = Math.floor(canvas.width / fontSize);
+    let drops = [];
 
-    for (let i = 0; i < columns; i++) {
-      drops[i] = Math.floor(Math.random() * canvas.height / fontSize);
+    function initDrops() {
+      columns = Math.floor(canvas.width / fontSize);
+      drops = [];
+      for (let i = 0; i < columns; i++) {
+        drops[i] = Math.floor(Math.random() * canvas.height / fontSize);
+      }
     }
+
+    initDrops();
 
     function drawMatrix() {
       ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
@@ -522,124 +834,20 @@
     }
 
     setInterval(drawMatrix, 50);
+    
     window.addEventListener('resize', () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      resizeCanvas();
+      initDrops();
     });
 
     // Puzzle tracking
     let completedPuzzles = 0;
 
-    // Puzzle 1: Caesar Cipher (ROT13)
-    function checkCipher() {
-      const input = document.getElementById('cipher-input').value.toUpperCase().replace(/[^A-Z_]/g, '');
-      const feedback = document.getElementById('cipher-feedback');
-      
-      if (input === 'HELLO_WORLD_THE_ANSWER_IS_CHAOS') {
-        feedback.className = 'feedback success show';
-        feedback.textContent = '✓ ACCESS GRANTED - Level 1 Complete';
-        document.getElementById('status1').classList.add('complete');
-        completedPuzzles++;
-        unlockNextPuzzle(2);
-      } else {
-        feedback.className = 'feedback error show';
-        feedback.textContent = '✗ ACCESS DENIED - Incorrect decryption';
-      }
-    }
-
-    // Puzzle 2: Binary to ASCII
-    function checkBinary() {
-      const input = document.getElementById('binary-input').value.toUpperCase();
-      const feedback = document.getElementById('binary-feedback');
-      
-      if (input === 'GLITCH') {
-        feedback.className = 'feedback success show';
-        feedback.textContent = '✓ ACCESS GRANTED - Level 2 Complete';
-        document.getElementById('status2').classList.add('complete');
-        completedPuzzles++;
-        unlockNextPuzzle(3);
-      } else {
-        feedback.className = 'feedback error show';
-        feedback.textContent = '✗ ACCESS DENIED - Binary conversion failed';
-      }
-    }
-
-    // Puzzle 3: Hex Pattern
-    const hexValues = [
-      '2F', '44', '7A', '41', '3B', '45', '91', '4D',
-      '52', '4F', '1C', '4E', '88', '22', '6D', '33',
-      'A1', '55', 'B9', '77', '4A', 'C3', '99', '2E',
-      '5F', '66', 'D2', '8C', '19', '7B', 'E4', 'F1'
-    ];
-    const correctSequence = ['44', '41', '45', '4D', '4F', '4E']; // DAEMON
-    let selectedCells = [];
-
-    function initHexGrid() {
-      const grid = document.getElementById('hex-grid');
-      hexValues.forEach((val, idx) => {
-        const cell = document.createElement('div');
-        cell.className = 'hex-cell';
-        cell.textContent = val;
-        cell.onclick = () => selectHexCell(val, cell);
-        grid.appendChild(cell);
-      });
-    }
-
-    function selectHexCell(val, cell) {
-      if (selectedCells.length >= 6) {
-        resetHexSelection();
-      }
-      
-      selectedCells.push(val);
-      cell.classList.add('selected');
-      
-      if (selectedCells.length === 6) {
-        checkHexPattern();
-      }
-    }
-
-    function resetHexSelection() {
-      selectedCells = [];
-      document.querySelectorAll('.hex-cell').forEach(cell => {
-        cell.classList.remove('selected');
-      });
-    }
-
-    function checkHexPattern() {
-      const feedback = document.getElementById('hex-feedback');
-      
-      if (JSON.stringify(selectedCells) === JSON.stringify(correctSequence)) {
-        feedback.className = 'feedback success show';
-        feedback.textContent = '✓ ACCESS GRANTED - Level 3 Complete';
-        document.getElementById('status3').classList.add('complete');
-        completedPuzzles++;
-        unlockNextPuzzle(4);
-      } else {
-        feedback.className = 'feedback error show';
-        feedback.textContent = '✗ ACCESS DENIED - Pattern mismatch. Try again.';
-        setTimeout(resetHexSelection, 1500);
-      }
-    }
-
-    // Puzzle 4: Fibonacci Sequence
-    function checkSequence() {
-      const input = document.getElementById('sequence-input').value;
-      const feedback = document.getElementById('sequence-feedback');
-      
-      if (input === '89') {
-        feedback.className = 'feedback success show';
-        feedback.textContent = '✓ ACCESS GRANTED - Level 4 Complete';
-        document.getElementById('status4').classList.add('complete');
-        completedPuzzles++;
-        
-        setTimeout(() => {
-          document.getElementById('final-access').classList.add('show');
-          document.getElementById('final-access').scrollIntoView({ behavior: 'smooth' });
-        }, 1000);
-      } else {
-        feedback.className = 'feedback error show';
-        feedback.textContent = '✗ ACCESS DENIED - Sequence analysis failed';
-      }
+    // Helper function to show feedback
+    function showFeedback(feedbackId, isSuccess, message) {
+      const feedback = document.getElementById(feedbackId);
+      feedback.className = isSuccess ? 'feedback success show' : 'feedback error show';
+      feedback.textContent = message;
     }
 
     // Unlock next puzzle
@@ -648,13 +856,220 @@
         const nextPuzzle = document.getElementById('puzzle' + puzzleNum);
         if (nextPuzzle) {
           nextPuzzle.classList.remove('locked');
-          nextPuzzle.scrollIntoView({ behavior: 'smooth' });
+          nextPuzzle.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       }, 800);
     }
 
-    // Initialize
-    initHexGrid();
+    // Complete puzzle
+    function completePuzzle(num) {
+      document.getElementById('status' + num).classList.add('complete');
+      completedPuzzles++;
+      if (completedPuzzles === 8) {
+        document.getElementById('final-access').classList.add('show');
+        document.getElementById('final-access').scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    // Puzzle 1: Caesar Cipher (ROT13)
+    document.getElementById('cipher-submit').addEventListener('click', function() {
+      const input = document.getElementById('cipher-input').value.toUpperCase().replace(/[^A-Z_]/g, '');
+      
+      if (input === 'HELLO_WORLD_THE_ANSWER_IS_CHAOS') {
+        showFeedback('cipher-feedback', true, '✓ ACCESS GRANTED - Level 1 Complete');
+        completePuzzle(1);
+        unlockNextPuzzle(2);
+      } else {
+        showFeedback('cipher-feedback', false, '✗ ACCESS DENIED - Incorrect decryption');
+      }
+    });
+
+    // Allow Enter key for puzzle 1
+    document.getElementById('cipher-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        document.getElementById('cipher-submit').click();
+      }
+    });
+
+    // Puzzle 2: Binary to ASCII
+    document.getElementById('binary-submit').addEventListener('click', function() {
+      const input = document.getElementById('binary-input').value.toUpperCase();
+      
+      if (input === 'GLITCH') {
+        showFeedback('binary-feedback', true, '✓ ACCESS GRANTED - Level 2 Complete');
+        completePuzzle(2);
+        unlockNextPuzzle(3);
+      } else {
+        showFeedback('binary-feedback', false, '✗ ACCESS DENIED - Incorrect decode');
+      }
+    });
+
+    document.getElementById('binary-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        document.getElementById('binary-submit').click();
+      }
+    });
+
+    // Puzzle 3: Hex Pattern
+    const daemonHex = ['44', '41', '45', '4D', '4F', '4E'];
+    let hexSelected = [];
+    const hexPool = ['41','42','43','44','45','46','47','48','49','4A','4B','4C','4D','4E','4F','50','51','52','53','54','55','56','57','58','59','5A'];
+    const shuffledHex = [...hexPool, ...hexPool].sort(() => Math.random() - 0.5).slice(0, 32);
+    shuffledHex.forEach(hex => {
+      const cell = document.createElement('div');
+      cell.className = 'hex-cell';
+      cell.textContent = hex;
+      cell.addEventListener('click', () => {
+        if (cell.classList.contains('selected')) {
+          cell.classList.remove('selected');
+          hexSelected = hexSelected.filter(h => h !== hex);
+        } else {
+          cell.classList.add('selected');
+          hexSelected.push(hex);
+        }
+        if (hexSelected.length === 6 && hexSelected.every((h, i) => h === daemonHex[i])) {
+          showFeedback('hex-feedback', true, '✓ DAEMON UNLOCKED - Level 3 Complete');
+          completePuzzle(3);
+          unlockNextPuzzle(4);
+        } else if (hexSelected.length > 6) {
+          showFeedback('hex-feedback', false, '✗ TOO MANY SELECTIONS - Reset and try again');
+        }
+      });
+      document.getElementById('hex-grid').appendChild(cell);
+    });
+
+    document.getElementById('hex-reset').addEventListener('click', () => {
+      document.querySelectorAll('.hex-cell').forEach(c => c.classList.remove('selected'));
+      hexSelected = [];
+      showFeedback('hex-feedback', false, '');
+    });
+
+    // Puzzle 4: Port Scanner
+    const openPorts = ['80', '443', '22'];
+    const portPool = ['21', '22', '23', '25', '53', '80', '110', '143', '443', '993', '3389', '8080'];
+    const shuffledPorts = [...portPool].sort(() => Math.random() - 0.5);
+    shuffledPorts.forEach(port => {
+      const btn = document.createElement('div');
+      btn.className = 'port-button';
+      btn.textContent = port;
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('correct');
+        const selectedPorts = Array.from(document.querySelectorAll('.port-button.correct')).map(b => b.textContent);
+        if (selectedPorts.length === 3 && selectedPorts.sort().join('') === openPorts.sort().join('')) {
+          showFeedback('port-feedback', true, '✓ PORTS SCANNED - Level 4 Complete');
+          completePuzzle(4);
+          unlockNextPuzzle(5);
+        } else if (selectedPorts.length > 3 || selectedPorts.some(p => !openPorts.includes(p))) {
+          showFeedback('port-feedback', false, '✗ INVALID PORTS - Rescan');
+        }
+      });
+      document.getElementById('port-grid').appendChild(btn);
+    });
+
+    // Puzzle 5: XOR Cipher
+    document.getElementById('xor-submit').addEventListener('click', function() {
+      const input = document.getElementById('xor-input').value.toUpperCase();
+      const decrypted = String.fromCharCode(62^75, 60^75, 63^75, 59^75, 62^75); // H E L L O
+      if (input === decrypted) {
+        showFeedback('xor-feedback', true, '✓ XOR DECRYPTED - Level 5 Complete');
+        completePuzzle(5);
+        unlockNextPuzzle(6);
+      } else {
+        showFeedback('xor-feedback', false, '✗ XOR FAILED - Recalculate');
+      }
+    });
+
+    document.getElementById('xor-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        document.getElementById('xor-submit').click();
+      }
+    });
+
+    // Puzzle 6: Wire Defusal
+    const wireOrder = ['blue', 'green', 'red', 'yellow'];
+    const colors = ['blue', 'green', 'red', 'yellow'];
+    colors.forEach(color => {
+      const wireDiv = document.createElement('div');
+      wireDiv.className = 'wire';
+      wireDiv.innerHTML = `
+        <div class="wire-color" style="border-color: ${color === 'blue' ? '#00f' : color === 'green' ? '#0f0' : color === 'red' ? '#f00' : '#ff0'}; color: ${color === 'blue' ? '#00f' : color === 'green' ? '#0f0' : color === 'red' ? '#f00' : '#ff0'};">${color.toUpperCase()}</div>
+        <div class="wire-line" style="background: ${color === 'blue' ? '#00f' : color === 'green' ? '#0f0' : color === 'red' ? '#f00' : '#ff0'};"></div>
+        <div class="wire-cut">CUT</div>
+      `;
+      const cutBtn = wireDiv.querySelector('.wire-cut');
+      cutBtn.addEventListener('click', () => {
+        if (cutBtn.classList.contains('cut')) return;
+        cutBtn.classList.add('cut');
+        const index = colors.indexOf(color);
+        if (index === wireOrder.indexOf(color)) {
+          showFeedback('wire-feedback', true, '✓ WIRE CUT SUCCESS - Level 6 Complete');
+          completePuzzle(6);
+          unlockNextPuzzle(7);
+        } else {
+          showFeedback('wire-feedback', false, '💥 BOOM! Wrong wire order - Reset');
+          setTimeout(() => location.reload(), 2000);
+        }
+      });
+      document.getElementById('wire-puzzle').appendChild(wireDiv);
+    });
+
+    // Puzzle 7: Memory Match
+    const symbols = ['★', '♦', '♠', '♣', '♥', '●'];
+    const cards = [...symbols, ...symbols];
+    cards.sort(() => Math.random() - 0.5);
+    let flipped = [];
+    let matched = 0;
+    cards.forEach((sym, i) => {
+      const card = document.createElement('div');
+      card.className = 'memory-card';
+      card.dataset.sym = sym;
+      card.dataset.index = i;
+      card.addEventListener('click', () => {
+        if (card.classList.contains('flipped') || card.classList.contains('matched') || flipped.length === 2) return;
+        card.classList.add('flipped');
+        card.textContent = sym;
+        flipped.push(card);
+        if (flipped.length === 2) {
+          setTimeout(() => {
+            if (flipped[0].dataset.sym === flipped[1].dataset.sym) {
+              flipped.forEach(c => c.classList.add('matched'));
+              matched += 2;
+              if (matched === 12) {
+                showFeedback('memory-feedback', true, '✓ MEMORY MATCHED - Level 7 Complete');
+                completePuzzle(7);
+                unlockNextPuzzle(8);
+              }
+            } else {
+              flipped.forEach(c => {
+                c.classList.remove('flipped');
+                c.textContent = '';
+              });
+            }
+            flipped = [];
+          }, 1000);
+        }
+      });
+      document.getElementById('memory-game').appendChild(card);
+    });
+
+    // Puzzle 8: Complex Cipher
+    document.getElementById('final-submit').addEventListener('click', function() {
+      const input = document.getElementById('final-input').value.toUpperCase();
+      const base64Decoded = atob('VFJPUEVOUg=='); // TROOPER
+      const reversed = base64Decoded.split('').reverse().join(''); // REPOORT
+      if (input === reversed) {
+        showFeedback('final-feedback', true, '✓ DECRYPTION COMPLETE - All levels cleared!');
+        completePuzzle(8);
+      } else {
+        showFeedback('final-feedback', false, '✗ LAYER ERROR - Decode and reverse again');
+      }
+    });
+
+    document.getElementById('final-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        document.getElementById('final-submit').click();
+      }
+    });
   </script>
 </body>
 </html>
